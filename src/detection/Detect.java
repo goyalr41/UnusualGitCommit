@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ml.DataStatistics;
 import ml.FileTypeStatistics;
@@ -27,7 +29,7 @@ public class Detect {
 		return (1-Math.pow((1.0-x),(1.0/15.0)));
 	}
 	
-	public ResultDatastr resultdatanum(double value, double alphaglobal, double betaglobal, double alphaauthor, double betaauthor, boolean exists){
+	public ResultDatastr expocdffitval(double value, double alphaglobal, double betaglobal, double alphaauthor, double betaauthor, boolean exists){
 		
 		double j;
 		if(value != 0) {
@@ -67,6 +69,249 @@ public class Detect {
 	     
 	    return rds;
 	     
+	}
+	
+	public ResultDatastr timecheck(int value, boolean exists, FileTypeStatistics fts) {
+		ResultDatastr rds = new ResultDatastr();
+		rds.value = value;
+		
+		if(exists) {
+			double time0to23prev =  value - 1;
+	        if(time0to23prev < 0) {
+	        	time0to23prev = time0to23prev + 24.0;
+	        }
+	        
+	        double time0to23next = value + 1;
+	        if(time0to23next >= 24) {
+	        	time0to23next = time0to23next % 24.0;
+	        }
+	        
+	        //Average over 3 times
+	        double timefreq = (fts.authtimemap.get(value) + fts.authtimemap.get(time0to23prev) + fts.authtimemap.get(time0to23next))/3;
+	        
+	        //Only binary values
+            if(timefreq < 0.05*(fts.authortotalcommits)) {
+            	rds.globalorg = (timefreq/(fts.authortotalcommits));
+            	rds.globalmapped = mapping(0.995);
+	        }else {
+	        	rds.globalorg = 0.0;
+            	rds.globalmapped = mapping(0.0);
+
+	        }
+	    }else {
+	    	rds.globalorg = 0.0;
+        	rds.globalmapped = mapping(0.0);
+ 		}		 
+		return rds;
+	}
+	
+	public void filetypecheck (List<String> filetypes, FileTypeStatistics fts, boolean exists, ResultDatastr filpercentchan, ResultDatastr filpercommit, ResultDatastr combfrequency, ResultDatastr combprobability){
+		Map<String,Long> filecounts = new HashMap<>();
+    	//This is for current commit only
+    	for(String filetype : filetypes) {
+    		if(filecounts.containsKey(filetype)) {
+    			filecounts.put(filetype, filecounts.get(filetype) + 1);
+    		}else {
+    			filecounts.put(filetype, (long)1);
+    		}    		
+    	}
+    	
+		List<String> combinations = new ArrayList<String>();
+		
+    	for(String filetyp: filecounts.keySet()){
+    			combinations.add(filetyp);
+    	}
+    	
+    	Collections.sort(combinations);
+    	
+    	filpercentchan.valuestrglb = "NA";
+      	filpercentchan.globalorg = 100.0;
+      	filpercommit.valuestrglb = "NA";
+    	filpercommit.globalorg = 1.0;
+    	filpercentchan.valuestrauth = "NA";
+      	filpercentchan.authororg = 100.0;
+      	filpercommit.valuestrauth = "NA";
+    	filpercommit.authororg = 1.0;
+    	
+    	for(String filetype : filecounts.keySet()){
+    		if(fts.mapfileperchanged.containsKey(filetype)){
+    			if(filpercentchan.globalorg   > Math.min(fts.mapfileperchanged.get(filetype), filpercentchan.globalorg  )) {
+    				filpercentchan.globalorg   = Math.min(fts.mapfileperchanged.get(filetype), filpercentchan.globalorg);
+    				filpercentchan.valuestrglb = filetype;
+    			}
+    		} else {
+    			filpercentchan.globalorg  = 0.0;
+    			filpercentchan.valuestrglb = filetype;
+    		}
+    		
+    		if(fts.mapfilecommitchanged.containsKey(filetype)){
+    			if(filpercommit.globalorg > Math.min((fts.mapfilecommitchanged.get(filetype)/fts.totalcommits),filpercommit.globalorg)) {
+    				filpercommit.globalorg = Math.min((fts.mapfilecommitchanged.get(filetype)/fts.totalcommits),filpercommit.globalorg);
+    				filpercommit.valuestrglb = filetype;
+    			}
+    		} else {
+    			filpercommit.globalorg = 0.0;
+    			filpercommit.valuestrglb = filetype;
+    		}
+    		
+
+        	if(exists) {
+            	
+            	if(fts.mapauthfileperchanged.containsKey(filetype)){
+           			if(filpercentchan.authororg   > Math.min(fts.mapauthfileperchanged.get(filetype), filpercentchan.authororg  )) {
+           				filpercentchan.authororg   = Math.min(fts.mapauthfileperchanged.get(filetype), filpercentchan.authororg);
+           				filpercentchan.valuestrauth = filetype;
+           			}
+           		} else {
+           			filpercentchan.authororg  = 0.0;
+           			filpercentchan.valuestrauth = filetype;
+           		}
+            		
+           		if(fts.mapauthfilecommitchanged.containsKey(filetype)){
+           			if(filpercommit.authororg > Math.min((fts.mapauthfilecommitchanged.get(filetype)/fts.authortotalcommits),filpercommit.authororg)) {
+           				filpercommit.authororg = Math.min((fts.mapauthfilecommitchanged.get(filetype)/fts.authortotalcommits),filpercommit.authororg);
+           				filpercommit.valuestrauth = filetype;
+           			}
+           		} else {
+           			filpercommit.authororg = 0.0;
+           			filpercommit.valuestrauth = filetype;
+           		}
+           	}else {
+        		filpercentchan.authororg = 100.0;
+            	filpercommit.authororg = 1.0;
+    			filpercentchan.valuestrauth = "NA";
+    			filpercommit.valuestrauth = "NA";
+        	}
+        	
+    	}
+    	
+    	combfrequency.valuestrglb = "NA";
+    	combfrequency.globalorg = 1.0;
+    	combprobability.valuestrglb = "NA";
+    	combprobability.globalorg = 1.0;
+    	combfrequency.valuestrauth = "NA";
+    	combfrequency.authororg = 1.0;
+    	combprobability.valuestrauth = "NA";
+    	combprobability.authororg = 1.0;
+    	
+    	for(int s = 0; s + 1 < combinations.size(); s++) {
+	    	for(int u = s + 1; u < combinations.size(); u++) {
+	    		String combkey = combinations.get(s) + "," + combinations.get(u);
+	    		
+	    		if(fts.twocombinations.containsKey(combkey)){
+	    			
+	    			List<String> temp1 = fts.twocombinations.get(combkey);
+	    			if(combfrequency.globalorg > Math.min(combfrequency.globalorg,((double)temp1.size())/fts.totalcommits)) {
+	    				combfrequency.globalorg = Math.min(combfrequency.globalorg,((double)temp1.size())/fts.totalcommits);
+	    				combfrequency.valuestrglb = combkey;
+	    			}
+	    		}else {
+	    			combfrequency.globalorg = 0.0;	 
+	    			combfrequency.valuestrglb = combkey;
+	    		}
+	    		
+	    		if(fts.meanmap.containsKey(combkey) && fts.sdtmap.containsKey(combkey)) {
+
+	    			double prob;
+	    			double chck = Math.log10(filecounts.get(s)/filecounts.get(u));
+	    			
+	    			if(chck - fts.meanmap.get(combkey) != 0) {
+	    				prob = (Math.pow(fts.sdtmap.get(combkey),2.0))/(Math.pow((chck-fts.meanmap.get(combkey)), 2.0));
+	    			}else {
+	    				prob = 1.0;
+	    			}
+	    			
+	    			if(combprobability.globalorg > prob) {
+	    				combprobability.globalorg = prob;
+	    				combprobability.valuestrglb = combkey;
+	    			}
+	    		}
+	    		
+	    		if(exists) {
+		    		if(fts.authtwocombinations.containsKey(combkey)){
+		    			
+		    			List<String> temp1 = fts.authtwocombinations.get(combkey);
+		    			if(combfrequency.authororg > Math.min(combfrequency.authororg,((double)temp1.size())/fts.authortotalcommits)) {
+		    				combfrequency.authororg = Math.min(combfrequency.authororg,((double)temp1.size())/fts.authortotalcommits);
+		    				combfrequency.valuestrauth = combkey;
+		    			}
+		    		}else {
+		    			combfrequency.authororg = 0.0;	 
+		    			combfrequency.valuestrauth = combkey;
+		    		}
+		    		
+		    		if(fts.authormeanmap.containsKey(combkey) && fts.authorsdtmap.containsKey(combkey)) {
+	
+		    			double prob;
+		    			double chck = Math.log10(filecounts.get(s)/filecounts.get(u));
+		    			
+		    			if(chck - fts.authormeanmap.get(combkey) != 0) {
+		    				prob = (Math.pow(fts.authorsdtmap.get(combkey),2.0))/(Math.pow((chck-fts.authormeanmap.get(combkey)), 2.0)); //Chebyshev's Inquality
+		    			}else {
+		    				prob = 1.0;
+		    			}
+		    			
+		    			if(combprobability.authororg > prob) {
+		    				combprobability.authororg = prob;
+		    				combprobability.valuestrauth = combkey;
+		    			}
+		    		}
+	    		}else {
+	    	    	combfrequency.valuestrauth = "NA";
+	    	    	combfrequency.authororg = 1.0;
+	    	    	combprobability.valuestrauth = "NA";
+	    	    	combprobability.authororg = 1.0;
+	    		}
+	    		
+	    	}
+		}
+    	
+    	//if(filpercentchan.globalorg < 0.02){
+    	//	filpercentchan.globalmapped = mapping(0.995);
+    		filpercentchan.globalmapped = mapping(1.0-(filpercentchan.globalorg/100.0));
+		/*}else {
+			filpercentchan.globalmapped = mapping(0.0);
+		}*/
+		
+		//if(filpercommit.globalorg < 0.001){ //1 in 1000 commits
+		//	filpercommit.globalmapped = mapping(0.995);
+    		filpercommit.globalmapped = mapping(1.0-filpercommit.globalorg);
+		/*}else {
+			filpercommit.globalmapped = mapping(0.0);
+		}*/
+		
+		//if(combfrequency.globalorg < 0.001) { //1 in 1000 commits
+		//	combfrequency.globalmapped = mapping(0.995);
+    		combfrequency.globalmapped = mapping(1.0-combfrequency.globalorg);
+		/*}else {
+			combfrequency.globalmapped = mapping(0.0);
+		}*/
+		
+    		combprobability.globalmapped = mapping(1.0-combprobability.globalorg);
+    		
+    	//if(filpercentchan.authororg < 0.02){
+       	//	filpercentchan.authormapped = mapping(0.995);
+    		filpercentchan.authormapped = mapping(1.0-(filpercentchan.authororg/100.0));
+    	/*}else {
+    		filpercentchan.authormapped = mapping(0.0);
+   		}*/
+    		
+    	//if(filpercommit.authororg < 0.01){ //1 in 100 commits
+    	//	filpercommit.authormapped = mapping(0.995);
+       		filpercommit.authormapped = mapping(1.0-filpercommit.authororg);
+   		/*}else {
+   			filpercommit.authormapped = mapping(0.0);
+   		}*/
+    		
+    	//if(combfrequency.authororg < 0.01) { //1 in 100 commits
+    	//	combfrequency.authormapped = mapping(0.995);
+       		combfrequency.authormapped = mapping(1.0-combfrequency.authororg);
+   		/*}else {
+   			combfrequency.authormapped = mapping(0.0);
+   		}*/
+    		
+        combprobability.authormapped = mapping(1.0-combprobability.authororg);    		
+
 	}
 	
 	@SuppressWarnings("unused")
@@ -118,28 +363,37 @@ public class Detect {
             
 			boolean exists = false;
 			
-			File authtime = new File(rs.Datapath +"//Author//"+ email +"_train.tsv"); 
+			File authfile = new File(rs.Datapath +"//Author//"+ email +"_train.tsv"); 
 
-			if(authtime.exists()) {
-				 List<String> sizech = FileUtils.readLines(authtime);  
+			if(authfile.exists()) {
+				 List<String> sizech = FileUtils.readLines(authfile);  
 			     if(sizech.size() > 20) {  //Author profile is built only when he has done more than 20 commits.
 			    	 exists = true;
 			    	 ds.calculateauthor(email);
+			    	 fts.calcauthor(email);
 			     }
 	    	}
 			
-			ResultDatastr totalloc = resultdatanum(totallinechanged, ds.totallocalpha, ds.totallocbeta, ds.totallocauthalpha, ds.totallocauthbeta, exists);
-			ResultDatastr locadded = resultdatanum(ovllineadd, ds.locaddalpha, ds.locaddbeta, ds.locaddauthalpha, ds.locaddauthbeta, exists);
-			ResultDatastr locremoved = resultdatanum(ovllinerem, ds.locremalpha, ds.locrembeta, ds.locremauthalpha, ds.locremauthbeta, exists);
+			ResultDatastr totalloc = expocdffitval(totallinechanged, ds.totallocalpha, ds.totallocbeta, ds.totallocauthalpha, ds.totallocauthbeta, exists);
+			ResultDatastr locadded = expocdffitval(ovllineadd, ds.locaddalpha, ds.locaddbeta, ds.locaddauthalpha, ds.locaddauthbeta, exists);
+			ResultDatastr locremoved = expocdffitval(ovllinerem, ds.locremalpha, ds.locrembeta, ds.locremauthalpha, ds.locremauthbeta, exists);
 
-			ResultDatastr totalfilechanged = resultdatanum(totalfilchan, ds.nofalpha, ds.nofbeta, ds.nofauthalpha, ds.nofauthbeta, exists);
-			ResultDatastr totalfileadded = resultdatanum(totalfiladd, ds.nofaddalpha, ds.nofaddbeta, ds.nofaddauthalpha, ds.nofaddauthbeta, exists);
-			ResultDatastr totalfileremoved = resultdatanum(totalfilrem, ds.nofremalpha, ds.nofrembeta, ds.nofremauthalpha, ds.nofremauthbeta, exists);
+			ResultDatastr totalfilechanged = expocdffitval(totalfilchan, ds.nofalpha, ds.nofbeta, ds.nofauthalpha, ds.nofauthbeta, exists);
+			ResultDatastr totalfileadded = expocdffitval(totalfiladd, ds.nofaddalpha, ds.nofaddbeta, ds.nofaddauthalpha, ds.nofaddauthbeta, exists);
+			ResultDatastr totalfileremoved = expocdffitval(totalfilrem, ds.nofremalpha, ds.nofrembeta, ds.nofremauthalpha, ds.nofremauthbeta, exists);
 
-			ResultDatastr commitmsg = resultdatanum(commsgsize, ds.commsgalpha, ds.commsgbeta, ds.commsgauthalpha, ds.commsgauthbeta, exists);
+			ResultDatastr commitmsg = expocdffitval(commsgsize, ds.commsgalpha, ds.commsgbeta, ds.commsgauthalpha, ds.commsgauthbeta, exists);
 
-			ResultDatastr timeofcommit = resultdatanum(tiofcommit, ds.timeauthalpha, 0.0, ds.timeauthalpha, ds.timeauthbeta, exists); //As time is only for author, so global value is 0
+			ResultDatastr timeofcommit = timecheck(tiofcommit, exists, fts); //As time is only for author.
 
+	    	//These all contains the min value from all filetypes
+	    	ResultDatastr filpercentchan = new ResultDatastr(); //Percentage of filetype changed
+	    	ResultDatastr filpercommit = new ResultDatastr(); //Filetype changed in how many commits
+	    	ResultDatastr combfrequency = new ResultDatastr(); //Combination changed in how many commits
+	    	ResultDatastr combprobability = new ResultDatastr(); //Combination probability, ratio of files
+	    	
+	    	filetypecheck(filetypes, fts, exists, filpercentchan, filpercommit, combfrequency, combprobability);
+	    	
 		}
 		
 		

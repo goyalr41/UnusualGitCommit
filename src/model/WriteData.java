@@ -42,9 +42,9 @@ public class WriteData {
 		
 	}
 	
-	public void createauthorfile(File authtime) throws IOException{
-		authtime.getParentFile().mkdirs();
-    	FileWriter writer_authtime = new FileWriter(authtime);
+	public void createauthorfile(File authfile) throws IOException{
+		authfile.getParentFile().mkdirs();
+    	FileWriter writer_authtime = new FileWriter(authfile);
     	
     	writer_authtime.append("Commit Id\t");
         writer_authtime.append("Total LOC\t");
@@ -84,12 +84,12 @@ public class WriteData {
 		writer.flush();
 		writer.close();
 		
-		File authtime = new File(rs.Datapath +"//Author//"+ email+"_train.tsv"); 
-    	if(!authtime.exists()) {
-    		createauthorfile(authtime);
+		File authfile = new File(rs.Datapath +"//Author//"+ email+"_train.tsv"); 
+    	if(!authfile.exists()) {
+    		createauthorfile(authfile);
     	}
     	
-    	FileWriter writer_authtime = new FileWriter(authtime, true);
+    	FileWriter writer_authtime = new FileWriter(authfile, true);
             
         writer_authtime.append(commitid + "\t");
         writer_authtime.append(totalloc + "\t");
