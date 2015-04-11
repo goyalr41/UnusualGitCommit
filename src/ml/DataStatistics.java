@@ -1,5 +1,6 @@
 package ml;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,23 +12,24 @@ import ml.TextConsole;
 
 public class DataStatistics {
 	
-	public static double totallocbeta, totallocalpha, totallocauthbeta, totallocauthalpha;
-	public static double locaddbeta, locaddalpha, locaddauthbeta, locaddauthalpha;
-	public static double locrembeta, locremalpha, locremauthbeta, locremauthalpha;
-	public static double nofbeta, nofalpha, nofauthbeta, nofauthalpha;
-	public static double nofaddbeta, nofaddalpha, nofaddauthbeta, nofaddauthalpha;
-	public static double nofrembeta, nofremalpha, nofremauthbeta, nofremauthalpha;
-	public static double commsgalpha, commsgbeta, commsgauthbeta, commsgauthalpha;
-	public static double timebeta, timealpha;
+	public double totallocbeta, totallocalpha, totallocauthbeta, totallocauthalpha;
+	public double locaddbeta, locaddalpha, locaddauthbeta, locaddauthalpha;
+	public double locrembeta, locremalpha, locremauthbeta, locremauthalpha;
+	public double nofbeta, nofalpha, nofauthbeta, nofauthalpha;
+	public double nofaddbeta, nofaddalpha, nofaddauthbeta, nofaddauthalpha;
+	public double nofrembeta, nofremalpha, nofremauthbeta, nofremauthalpha;
+	public double commsgalpha, commsgbeta, commsgauthbeta, commsgauthalpha;
+	public double timeauthbeta, timeauthalpha;
 	
-	public static Map<String,Double> meanmap = new HashMap<String,Double>();
-	public static Map<String,Double> sdtmap = new HashMap<String,Double>();
-	public static Map<String,Double> authormeanmap = new HashMap<String,Double>();
-	public static Map<String,Double> authorsdtmap = new HashMap<String,Double>();
+	public Map<String,Double> meanmap = new HashMap<String,Double>();
+	public Map<String,Double> sdtmap = new HashMap<String,Double>();
+	public Map<String,Double> authormeanmap = new HashMap<String,Double>();
+	public Map<String,Double> authorsdtmap = new HashMap<String,Double>();
 	
-	public static Rengine re;
+	public Rengine re;
+	public RepoSettings rs;
 	
-	public void initiate() {
+	public void initiate(RepoSettings rs1) {
 		// Making sure we have the right version of everything
 		if (!Rengine.versionCheck()) {
 		    System.err.println("** Version mismatch - Java files don't match library version.");
@@ -36,6 +38,7 @@ public class DataStatistics {
 		
 		String[] args = null;
 		re = new Rengine(args, false, new TextConsole());
+		rs = rs1;
 		
 		// the engine creates R is a new thread, so we should wait until it's ready
         if (!re.waitForR()) {
@@ -45,12 +48,12 @@ public class DataStatistics {
 		
 	}
 	
-	public static void calcglobal() {
+	public void calcglobal() {
        
 		
 		try {
 			
-			String Datapath = RepoSettings.Datapath;
+			String Datapath = rs.Datapath;
 			String DatapathforR = Datapath.replace("//", "/");
 			String read1 = "Data <- read.delim(\"" + DatapathforR + "/Global/Training_data.tsv\")";
 			
@@ -187,10 +190,10 @@ public class DataStatistics {
 		 
     }
 	
-	public static void calculateauthor(String email){
+	public void calculateauthor(String email){
         		
 		try {
-			String Datapath = RepoSettings.Datapath;
+			String Datapath = rs.Datapath;
 			String DatapathforR = Datapath.replace("//", "/");
 			String read1 = "Data <- read.delim(\"" + DatapathforR + "/Author/"+ email +"_train.tsv\")";
 	
@@ -211,8 +214,8 @@ public class DataStatistics {
 			re.eval(temp);
 			REXP a = re.eval("a = exp(a/b)");			
 			
-		    timebeta = Double.parseDouble(b.toString().substring(8, b.toString().length()-2));
-		    timealpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
+		    timeauthbeta = Double.parseDouble(b.toString().substring(8, b.toString().length()-2));
+		    timeauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    
 			re.eval("p = Data$Total.LOC");
@@ -350,6 +353,88 @@ public class DataStatistics {
 		
 		 re.end();
     
+	}
+	
+public void combinationgraphglobal() {
+    	
+		meanmap.clear();
+		sdtmap.clear();
+		
+        File combdir =  new File( rs.Datapath + "//Global//FileCombinations");
+	    File[] files = combdir.listFiles();
+	    if(files == null) {
+	    	return;
+	    }
+	    for(File f: files){
+	    	String path = f.getAbsolutePath();
+	    	//System.out.println(path);
+	    	int p = path.lastIndexOf("\\");
+            String fil_name = path.substring(p+1, path.length());
+	    	int h = fil_name.lastIndexOf(".");
+            String fil_name_key = fil_name.substring(0,h);
+            fil_name = "`" + fil_name + "`"; 
+            path = path.replace("\\", "/");
+            //System.out.println(path);
+            String authread = fil_name +" <- read.delim(\""+path+"\", header=FALSE)";
+	    	re.eval(authread);
+	    	//System.out.println(authread);
+			
+			String mea = "s <- mean(log10("+fil_name+"$V1/"+fil_name+"$V2))";
+			String sd = "d <- sd(log10("+fil_name+"$V1/"+fil_name+"$V2))";
+			//String val = "abline(v=c("+mean+" - 3*" + sdt+ " , " + mean + ", "+ mean + " + 3*" + sdt + "), col=\"red\")"; 
+			REXP a = re.eval(mea);
+			REXP b = re.eval(sd);
+			
+			Double mean = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
+			Double std = Double.parseDouble(b.toString().substring(8, b.toString().length()-2));
+			
+			meanmap.put(fil_name_key,mean);
+			sdtmap.put(fil_name_key,std);
+				
+	    }
+	    
+	    re.end();
+    }
+
+	public void combinationgraphauthor(String email) {
+		
+		authormeanmap.clear();
+		authorsdtmap.clear();
+		
+	    File combdir =  new File( rs.Datapath + "//Author//FileCombinations//"+email);
+	    File[] files = combdir.listFiles();
+	    if(files == null) {
+	    	return;
+	    }
+	    for(File f: files){
+	    	String path = f.getAbsolutePath();
+	    	//System.out.println(path);
+	    	int p = path.lastIndexOf("\\");
+	        String fil_name = path.substring(p+1, path.length());
+	        int h = fil_name.lastIndexOf(".");
+	        String fil_name_key = fil_name.substring(0,h);
+	        fil_name = "`" + fil_name + "`"; 
+	        path = path.replace("\\", "/");
+	        //System.out.println(path);
+	        String authread = fil_name +" <- read.delim(\""+path+"\", header=FALSE)";
+	    	re.eval(authread);
+	    	//System.out.println(authread);
+			
+			String mea = "s <- mean(log10("+fil_name+"$V1/"+fil_name+"$V2))";
+			String sd = "d <- sd(log10("+fil_name+"$V1/"+fil_name+"$V2))";
+			//String val = "abline(v=c("+mean+" - 3*" + sdt+ " , " + mean + ", "+ mean + " + 3*" + sdt + "), col=\"red\")"; 
+			REXP a = re.eval(mea);
+			REXP b = re.eval(sd);
+			
+			Double mean = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
+			Double std = Double.parseDouble(b.toString().substring(8, b.toString().length()-2));
+			
+			authormeanmap.put(fil_name_key,mean);
+			authorsdtmap.put(fil_name_key,std);
+				
+	    	}
+	    
+	    	re.end();
 	}
 	
 	

@@ -7,11 +7,11 @@ import org.apache.commons.io.FileUtils;
 
 public class RepoSettings {
 	
-	public static String RepositoryPath = "";
-	public static String ModelPath = "";
-	public static String Datapath = "";
-	public static String Resultpath = "";
-	public static String Statspath = "";
+	public String RepositoryPath = "";
+	public String ModelPath = "";
+	public String Datapath = "";
+	public String Resultpath = "";
+	public String Statspath = "";
 	
 	public RepoSettings(String username, String reponame, boolean clone) throws IOException {
 		 

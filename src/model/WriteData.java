@@ -12,34 +12,34 @@ import org.apache.commons.io.FileUtils;
 import settings.RepoSettings;
 
 public class WriteData {
-	File repo_global;
+
+	RepoSettings rs;
 	
-	public void initiate() throws IOException{
+	public void initiate(RepoSettings rs1) throws IOException{
+				rs = rs1;
+	}
+	
+	public void createglobalfile(File repo_global) throws IOException {
 		
-		repo_global = new File(RepoSettings.Datapath + "//Global//Training_data.tsv");
-        repo_global.getParentFile().mkdirs();
-        
-        if(repo_global.exists()) {
-        	repo_global.delete();
-        }
-        
-        repo_global.createNewFile();
-        FileWriter writer = new FileWriter(repo_global); 
-        
-        writer.append("Commit Id\t");
-        writer.append("Author E-Mail\t");
-        writer.append("Total LOC\t");
-        writer.append("LOC added\t");
-        writer.append("LOC removed\t");
-        writer.append("Files affected\t");
+		repo_global.getParentFile().mkdirs();
+	     
+	    FileWriter writer = new FileWriter(repo_global); 
+	        
+	    writer.append("Commit Id\t");
+	    writer.append("Author E-Mail\t");
+	    writer.append("Total LOC\t");
+	    writer.append("LOC added\t");
+	    writer.append("LOC removed\t");
+	    writer.append("Files affected\t");
         writer.append("Files added\t");
         writer.append("Files removed\t");
-        writer.append("Commit Msg");
+	    writer.append("Commit Msg\t");
+	    writer.append("Time");
         writer.append("\n");
-        
+	        
         writer.flush();
-        writer.close();
-        
+	    writer.close();
+		
 	}
 	
 	public void createauthorfile(File authtime) throws IOException{
@@ -47,23 +47,27 @@ public class WriteData {
     	FileWriter writer_authtime = new FileWriter(authtime);
     	
     	writer_authtime.append("Commit Id\t");
-        writer_authtime.append("Time\t");
         writer_authtime.append("Total LOC\t");
         writer_authtime.append("LOC added\t");
         writer_authtime.append("LOC removed\t");
         writer_authtime.append("Files affected\t");
         writer_authtime.append("Files added\t");
         writer_authtime.append("Files removed\t");
-        writer_authtime.append("Commit Msg");
+        writer_authtime.append("Commit Msg\t");
+        writer_authtime.append("Time");
         writer_authtime.append("\n");
         
         writer_authtime.flush();
 	    writer_authtime.close();
 	}
 	
-	public boolean write(String commitid, String email, int totalloc, int locadd, int locrem, int nof, int nofadd, int nofrem, int timeofcommit, List<String> filetypes, int commsgsize) throws IOException{
+	public void write(String commitid, String email, int totalloc, int locadd, int locrem, int nof, int nofadd, int nofrem, int timeofcommit, List<String> filetypes, int commsgsize) throws IOException{
 		
-		repo_global = new File(RepoSettings.Datapath + "//Global//Training_data.tsv");
+		File repo_global = new File(rs.Datapath + "//Global//Training_data.tsv");
+		
+		if(!repo_global.exists()) {
+    		createglobalfile(repo_global);
+    	}
 		
 		FileWriter writer = new FileWriter(repo_global,true); 
 		writer.append(commitid + "\t");
@@ -74,48 +78,41 @@ public class WriteData {
 		writer.append(nof + "\t");
 		writer.append(nofadd + "\t");
 		writer.append(nofrem + "\t");
-		writer.append(commsgsize + "\n");
+		writer.append(commsgsize + "\t");
+		writer.append(timeofcommit + "\n");
 		
 		writer.flush();
 		writer.close();
 		
-		boolean sizeauth = false;
-		File authtime = new File(RepoSettings.Datapath +"//Author//"+ email+"_train.tsv"); 
+		File authtime = new File(rs.Datapath +"//Author//"+ email+"_train.tsv"); 
     	if(!authtime.exists()) {
     		createauthorfile(authtime);
     	}
     	
     	FileWriter writer_authtime = new FileWriter(authtime, true);
-        List<String> sizech = FileUtils.readLines(authtime);
-            
-        if(sizech.size() > 20) {  //Author profile is built only when he has done more than 20 commits.
-        	sizeauth = true;
-        }
             
         writer_authtime.append(commitid + "\t");
-        writer_authtime.append(timeofcommit + "\t");
         writer_authtime.append(totalloc + "\t");
         writer_authtime.append(locadd + "\t");
         writer_authtime.append(locrem + "\t");
         writer_authtime.append(nof + "\t");
         writer_authtime.append(nofadd + "\t");
         writer_authtime.append(nofrem + "\t");
-        writer_authtime.append(commsgsize + "\n");
+        writer_authtime.append(commsgsize + "\t");
+        writer_authtime.append(timeofcommit + "\n");
             
         writer_authtime.flush();
         writer_authtime.close();
     
     	writeforfiles(commitid, email, filetypes);
-    	
-    	return sizeauth;
 
 	}
 	
 	//Write about types of file changed and files count in all commit
 	public void writeforfiles(String commitid, String email, List<String> filetypes) throws IOException {
 	      
-		File file_global = new File(RepoSettings.Datapath + "//Global//Training_filescount.tsv");
-		File file_global_matrix = new File(RepoSettings.Datapath + "//Global//Training_filestypescountcommit.tsv");
+		File file_global = new File(rs.Datapath + "//Global//Training_filescount.tsv");
+		File file_global_matrix = new File(rs.Datapath + "//Global//Training_filestypescountcommit.tsv");
 	  
 		Map<String,Long> mapfilecount = new HashMap<String,Long>();
 	        	        
@@ -170,8 +167,8 @@ public class WriteData {
 	    	writer2.close();
 	    	
 	    	   
-	        File authfiles = new File(RepoSettings.Datapath + "//Author//" + email +"_filescount.tsv"); 
-	        File auth_file_global_matrix = new File(RepoSettings.Datapath + "//Author//" + email + "_filepercom.tsv");
+	        File authfiles = new File(rs.Datapath + "//Author//" + email +"_filescount.tsv"); 
+	        File auth_file_global_matrix = new File(rs.Datapath + "//Author//" + email + "_filepercom.tsv");
 
 	        
 	        Map<String,Long> mapauthorfilecount = new HashMap<String,Long>();

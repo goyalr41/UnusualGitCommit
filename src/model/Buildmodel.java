@@ -22,9 +22,11 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
+import settings.RepoSettings;
+
 public class Buildmodel {
 	
-	public void build(Git git, List<RevCommit> logs) throws NoHeadException, GitAPIException, IOException {
+	public void build(Git git, List<RevCommit> logs, RepoSettings rs) throws NoHeadException, GitAPIException, IOException {
 		
 		 //ObjectId lastCommitId = repository.resolve(Constants.MASTER);
         ObjectId parentid = null;
@@ -40,6 +42,7 @@ public class Buildmodel {
         List<DiffEntry> diffs = null;
         
         WriteData wd = new WriteData(); //Class to write data to an external file
+        wd.initiate(rs);
         
         for (RevCommit rev : logs) {
         	
@@ -166,7 +169,7 @@ public class Buildmodel {
 	    	    
 	    	    String[] commsgwords = rev.getFullMessage().split(" ");
 	    	    
-	    	    wd.write(rev.getName().substring(0,11), email, totallinechanged, ovllineadd, ovllinerem, filetypes.size(), totalfiladd, totalfilrem, Integer.parseInt(formatter.format(p.getWhen())), filetypes, commsgwords.length);
+	    	    wd.write(rev.getName(), email, totallinechanged, ovllineadd, ovllinerem, filetypes.size(), totalfiladd, totalfilrem, Integer.parseInt(formatter.format(p.getWhen())), filetypes, commsgwords.length);
 	    	              
         	}  
         }

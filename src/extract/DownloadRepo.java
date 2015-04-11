@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 import model.Buildmodel;
-import model.WriteData;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.eclipse.jgit.api.CloneCommand;
@@ -25,7 +24,6 @@ public class DownloadRepo {
 
 	Git git;
 	
-	@SuppressWarnings("static-access")
 	public void cloneRepo(String username, String reponame) throws InvalidRemoteException, TransportException, GitAPIException, IOException{
 		
 		CloneCommand clonecommand = Git.cloneRepository();
@@ -48,15 +46,11 @@ public class DownloadRepo {
         }
 	    Collections.reverse(logs);
 	    
-	    WriteData wd = new WriteData();
-	    wd.initiate();
-	    
 	    Buildmodel bm = new Buildmodel();
-		bm.build(git,logs);
+		bm.build(git,logs, rs);
 		
 	}
 	
-	@SuppressWarnings("static-access")
 	public void pullRepo(String username, String reponame) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		
 		RepoSettings rs = new RepoSettings(username,reponame,false);
@@ -86,7 +80,7 @@ public class DownloadRepo {
 	    Collections.reverse(logs);
 	      
 		Buildmodel bm = new Buildmodel();
-		bm.build(git,logs);
+		bm.build(git,logs, rs);
 		
 	}
 }
