@@ -18,6 +18,7 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
+import detection.Detect;
 import settings.RepoSettings;
 
 public class DownloadRepo {
@@ -48,6 +49,9 @@ public class DownloadRepo {
 	    
 	    Buildmodel bm = new Buildmodel();
 		bm.build(git,logs, rs);
+		
+		Detect detect = new Detect();
+		detect.detect(rs, logs);
 		
 	}
 	

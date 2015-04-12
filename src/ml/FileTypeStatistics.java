@@ -26,7 +26,7 @@ public class FileTypeStatistics {
 	
 	public Map<String,Double> mapfileperchanged, mapauthfileperchanged;
 	public Map<String,Double> mapfilecommitchanged, mapauthfilecommitchanged; 
-	public Map<Double,Double> authtimemap;
+	public Map<Double,Double> authtimemap = new  HashMap<Double,Double>();
 	public Map<String,Double> meanmap, sdtmap;
 	public Map<String,Double> authormeanmap, authorsdtmap;
 	
@@ -158,7 +158,7 @@ public class FileTypeStatistics {
 	    		
 	    		List<String> listem = twocombinations.get(comb);
 	    		
-	    		if(listem.size() < 20) { //Atleast 20 combinations required
+	    		if(listem.size() < 10) { //Atleast 10 combinations required
 	    			continue;
 	    		}
 	    		
@@ -259,7 +259,7 @@ public class FileTypeStatistics {
 	       		break;
          	}
 		    String[] asd = qwer.split("\t");
-		  	double zxc =  Double.parseDouble(asd[1]);
+		  	double zxc =  Double.parseDouble(asd[8]);
 		  	if(timemap.containsKey(zxc)) {
 	      		timemap.put(zxc, timemap.get(zxc)+1.0);
 	       	}else {

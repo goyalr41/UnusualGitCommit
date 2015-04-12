@@ -17,15 +17,9 @@ import settings.Settings;
 
 public class Test {
 	public static void main(String args[]) throws InvalidRemoteException, TransportException, GitAPIException, IOException {
-		//new Settings();
-		//DownloadRepo dr = new DownloadRepo();
-		//dr.pullRepo("goyalr41", "githubtry");
-		File f = new File("D://Temporary//Temp.txt");
-		List<String> ls = FileUtils.readLines(f);
-		ls.remove(0);
-		Collections.reverse(ls);
-		for(String s: ls) {
-			System.out.println(s);
-		}
+		new Settings();
+		DownloadRepo dr = new DownloadRepo();
+		dr.cloneRepo("chjj", "marked");
+		
 	}
 }

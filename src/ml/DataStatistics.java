@@ -60,8 +60,10 @@ public class DataStatistics {
 			re.eval(read1);
 			
 			re.eval("p = Data$Total.LOC");
-			REXP bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
+			re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			REXP bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
 				re.eval("p = append(p,max(p)+1)");
 			}
 			re.eval("Y = ecdf(p)");
@@ -79,8 +81,10 @@ public class DataStatistics {
 
 		    
 		    re.eval("p = Data$LOC.added");
-			bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
 				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
@@ -96,9 +100,11 @@ public class DataStatistics {
 		    locaddalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		     
 		    re.eval("p = Data$LOC.removed");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -113,9 +119,11 @@ public class DataStatistics {
 		    locremalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Files.affected");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -130,9 +138,11 @@ public class DataStatistics {
 		    nofalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Files.added");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -147,9 +157,11 @@ public class DataStatistics {
 		    nofaddalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Files.removed");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -164,9 +176,11 @@ public class DataStatistics {
 		    nofremalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Commit.Msg");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -201,9 +215,11 @@ public class DataStatistics {
 			re.eval(read1);
 			
 			re.eval("p = Data$Time");
-			REXP bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+			re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			REXP bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -219,9 +235,11 @@ public class DataStatistics {
 		    
 		    
 			re.eval("p = Data$Total.LOC");
-			bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+			re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -237,9 +255,11 @@ public class DataStatistics {
 
 		    
 		    re.eval("p = Data$LOC.added");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -254,9 +274,11 @@ public class DataStatistics {
 		    locaddauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		     
 		    re.eval("p = Data$LOC.removed");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -271,9 +293,11 @@ public class DataStatistics {
 		    locremauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Files.affected");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -288,9 +312,11 @@ public class DataStatistics {
 		    nofauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Files.added");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -305,9 +331,11 @@ public class DataStatistics {
 		    nofaddauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$LOC.removed");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -322,9 +350,11 @@ public class DataStatistics {
 		    nofremauthalpha = Double.parseDouble(a.toString().substring(8, a.toString().length()-2));
 		    
 		    re.eval("p = Data$Commit.Msg");
-		    bool = re.eval("isTRUE(all.equal( max(p) , min(p)))");
-			if(bool.toString().substring(8, bool.toString().length()-2).equals("TRUE")) {
-				re.eval("p = append(p,max(p)+1)");
+		    re.eval("j = 0");
+			re.eval("if(isTRUE(all.equal( max(p) , min(p) ))) {j = 1}");
+			bool = re.eval("j");
+			if(bool.toString().substring(8, bool.toString().length()-2).equals("1.0")) {					
+				re.eval("p = append(p,max(p)+1)"); //This is to handle case of all same values.
 			}
 			re.eval("Y = ecdf(p)");
 			re.eval("df <- data.frame(x=log(p+0.000001), y = log(1.000001 - Y(p)))");
@@ -372,6 +402,8 @@ public void combinationgraphglobal() {
             String fil_name = path.substring(p+1, path.length());
 	    	int h = fil_name.lastIndexOf(".");
             String fil_name_key = fil_name.substring(0,h);
+            h = fil_name_key.lastIndexOf(".");
+	        fil_name_key = fil_name_key.substring(0,h) + "," + fil_name_key.substring(h,fil_name_key.length()) ;
             fil_name = "`" + fil_name + "`"; 
             path = path.replace("\\", "/");
             //System.out.println(path);
@@ -413,6 +445,8 @@ public void combinationgraphglobal() {
 	        String fil_name = path.substring(p+1, path.length());
 	        int h = fil_name.lastIndexOf(".");
 	        String fil_name_key = fil_name.substring(0,h);
+	        h = fil_name_key.lastIndexOf(".");
+	        fil_name_key = fil_name_key.substring(0,h) + "," + fil_name_key.substring(h,fil_name_key.length()) ;
 	        fil_name = "`" + fil_name + "`"; 
 	        path = path.replace("\\", "/");
 	        //System.out.println(path);

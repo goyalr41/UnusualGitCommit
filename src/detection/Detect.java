@@ -12,14 +12,11 @@ import ml.DataStatistics;
 import ml.FileTypeStatistics;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 import settings.RepoSettings;
 
 public class Detect {
-	
-	public double round2(double d) { //For rounding Decimal values
-	     return Math.round(d * 10000) / 10000.0;
-	}
 	
 	public double aggregate(double a, double b) { //Aggregating values of all attributes
 		return (a + b - a*b);
@@ -87,21 +84,23 @@ public class Detect {
 	        }
 	        
 	        //Average over 3 times
-	        double timefreq = (fts.authtimemap.get(value) + fts.authtimemap.get(time0to23prev) + fts.authtimemap.get(time0to23next))/3;
+	        double timefreq = (fts.authtimemap.get((double)value) + fts.authtimemap.get(time0to23prev) + fts.authtimemap.get(time0to23next))/3;
 	        
 	        //Only binary values
             if(timefreq < 0.05*(fts.authortotalcommits)) {
-            	rds.globalorg = (timefreq/(fts.authortotalcommits));
-            	rds.globalmapped = mapping(0.995);
+            	rds.authororg = (timefreq/(fts.authortotalcommits));
+            	rds.authormapped = mapping(0.995);
 	        }else {
-	        	rds.globalorg = 0.0;
-            	rds.globalmapped = mapping(0.0);
+	        	rds.authororg = 0.0;
+            	rds.authormapped = mapping(0.0);
 
 	        }
 	    }else {
-	    	rds.globalorg = 0.0;
-        	rds.globalmapped = mapping(0.0);
- 		}		 
+	    	rds.authororg = 0.0;
+        	rds.authormapped = mapping(0.0);
+ 		}	
+		rds.globalorg = 0.0; //As no profile for global
+    	rds.globalmapped = mapping(0.0);
 		return rds;
 	}
 	
@@ -213,7 +212,7 @@ public class Detect {
 	    		if(fts.meanmap.containsKey(combkey) && fts.sdtmap.containsKey(combkey)) {
 
 	    			double prob;
-	    			double chck = Math.log10(filecounts.get(s)/filecounts.get(u));
+	    			double chck = Math.log10(filecounts.get(combinations.get(s))/filecounts.get(combinations.get(u)));
 	    			
 	    			if(chck - fts.meanmap.get(combkey) != 0) {
 	    				prob = (Math.pow(fts.sdtmap.get(combkey),2.0))/(Math.pow((chck-fts.meanmap.get(combkey)), 2.0));
@@ -243,7 +242,7 @@ public class Detect {
 		    		if(fts.authormeanmap.containsKey(combkey) && fts.authorsdtmap.containsKey(combkey)) {
 	
 		    			double prob;
-		    			double chck = Math.log10(filecounts.get(s)/filecounts.get(u));
+		    			double chck = Math.log10(filecounts.get(combinations.get(s))/filecounts.get(combinations.get(u)));
 		    			
 		    			if(chck - fts.authormeanmap.get(combkey) != 0) {
 		    				prob = (Math.pow(fts.authorsdtmap.get(combkey),2.0))/(Math.pow((chck-fts.authormeanmap.get(combkey)), 2.0)); //Chebyshev's Inquality
@@ -314,8 +313,7 @@ public class Detect {
 
 	}
 	
-	@SuppressWarnings("unused")
-	public void detect(RepoSettings rs, List<String> Commitids) throws IOException{
+	public void detect(RepoSettings rs, List<RevCommit> Commitids) throws IOException{
 		
 		File repo_global = new File(rs.Datapath + "//Global//Training_data.tsv");
 		List<String> CommitsData = FileUtils.readLines(repo_global);
@@ -326,9 +324,6 @@ public class Detect {
 		List<String> CommitsFileData = FileUtils.readLines(file_global_matrix);
 		Collections.reverse(CommitsFileData);
 		
-		WriteResult wr = new WriteResult();
-		wr.initiate(rs);
-		
 		DataStatistics ds = new DataStatistics();
 		ds.initiate(rs);
 		ds.calcglobal();
@@ -337,13 +332,20 @@ public class Detect {
 		fts.initiate(rs,ds);
 		fts.calcglobal();
 		
+		WriteResult wr = new WriteResult();
+		wr.initiate(rs);
+		
 		int len = Commitids.size();
+		len = 500;
+		int ana = 0;
+		
 		for(int i = 0; i < len; i++) {
 			
 			String[] commitdata = CommitsData.get(i).split("\t");
 			
 			String commitid = commitdata[0];
 			String email = commitdata[1];
+			
 			int totallinechanged = Integer.parseInt(commitdata[2]);
 			int ovllineadd = Integer.parseInt(commitdata[3]);
             int ovllinerem = Integer.parseInt(commitdata[4]);
@@ -354,11 +356,11 @@ public class Detect {
             int tiofcommit = Integer.parseInt(commitdata[9]);
             
             String[] commitfiledata = CommitsFileData.get(i).split("\t");
-            String[] filetype = commitfiledata[1].split(",");
             List<String> filetypes = new ArrayList<String>();
             
-            for(String filtyp : filetype) {
-            	filetypes.add(filtyp);
+            for(int m = 1; m < commitfiledata.length; m++) {
+            	String[] filetype = commitfiledata[m].split(",");
+            	filetypes.add(filetype[0]);
             }
             
 			boolean exists = false;
@@ -394,8 +396,54 @@ public class Detect {
 	    	
 	    	filetypecheck(filetypes, fts, exists, filpercentchan, filpercommit, combfrequency, combprobability);
 	    	
+	    	List<Double> Values = new ArrayList<Double>();
+	    	String Decision;
+	    	Double Decisionval;
+	    	
+	    	Values.add(totalloc.globalmapped);
+	    	Values.add(totalloc.authormapped);
+	    	Values.add(locadded.globalmapped);
+	    	Values.add(locadded.authormapped);
+	    	Values.add(locremoved.globalmapped);
+	    	Values.add(locremoved.authormapped);
+	    	Values.add(totalfilechanged.globalmapped);
+	    	Values.add(totalfilechanged.authormapped);
+	    	
+	    	Values.add(totalfileadded.authormapped);
+	    	Values.add(totalfileremoved.authormapped);
+	    	
+	    	Values.add(commitmsg.globalmapped);
+	    	Values.add(commitmsg.authormapped);
+	    	
+	    	Values.add(timeofcommit.authormapped);
+	    	
+	    	Values.add(filpercentchan.globalmapped);
+	    	Values.add(filpercentchan.authormapped);
+	    	Values.add(filpercommit.globalmapped);
+	    	Values.add(filpercommit.authormapped);
+	    	Values.add(combfrequency.globalmapped);
+	    	Values.add(combfrequency.authormapped);
+	    	Values.add(combprobability.globalmapped);
+	    	Values.add(combprobability.authormapped);
+	    	
+	    	Decisionval = 0.0;
+	    	for(Double v: Values){
+	    		Decisionval = aggregate(Decisionval, v);
+	    	}
+	    	
+	    	if(Decisionval < 0.8) {
+	    		Decision = "Normal";
+	    	}else {
+	    		Decision = "Unusual";
+	    		ana++;
+	    	}
+	    	
+	    	wr.write(commitid.substring(0,7), email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+	    	
+	    	System.out.println(commitid.substring(0,7));
 		}
 		
+		System.out.println(ana);
 		
 	}
 }
