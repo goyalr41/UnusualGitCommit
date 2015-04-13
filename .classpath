@@ -23,5 +23,8 @@
 	<classpathentry kind="lib" path="libraries/renjin-studio-0.7.0-RC7-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-collections4-4.0.jar"/>
 	<classpathentry kind="lib" path="libraries/jsch-0.1.52.jar"/>
+	<classpathentry kind="lib" path="libraries/jackson-annotations-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libraries/jackson-core-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libraries/jackson-databind-2.5.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

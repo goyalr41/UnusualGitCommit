@@ -27,7 +27,7 @@ public class Test {
 	public static void main(String args[]) throws InvalidRemoteException, TransportException, GitAPIException, IOException, ClassNotFoundException {
 		new Settings();
 		DownloadRepo dr = new DownloadRepo();
-		dr.pullRepo("goyalr41", "githubtry");
+		dr.cloneRepo("angular", "angular.js");
 		
 	}
 }

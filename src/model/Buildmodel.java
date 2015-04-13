@@ -106,6 +106,10 @@ public class Buildmodel {
 	    	                		if(tem.endsWith("null")) {
 	    	                			fileadd++;                          //File added
 	    	                		}else {
+	    	                			int p = tem.lastIndexOf("/");
+	    	                			if(p >= 0){
+	    	                				tem = tem.substring(p+1, tem.length());
+	    	                			}
 	    	                			int h = tem.lastIndexOf(".");
 	    	                			if(h >= 0) {
 	    	                				filetype = tem.substring(h, tem.length());
@@ -115,13 +119,19 @@ public class Buildmodel {
 	    		    	                		filetypes.add(filetype);
 	    		    	                		filtyp = 1;
 	    		    	                	}
+	    	                			}else {
+	    	                				//README, LICENSE type wanna do?
 	    	                			}
 	    	                		}
 	    	                	}
 	    	                	if(tem.startsWith("+++")) {
 	    	                		if(tem.endsWith("null")) {
 	    	                			filerem++;							//Fil removed
-	    	                		} else {	
+	    	                		} else {
+	    	                			int p = tem.lastIndexOf("/");
+	    	                			if(p >= 0){
+	    	                				tem = tem.substring(p+1, tem.length());
+	    	                			}
 	    	                			int h = tem.lastIndexOf(".");
 	    	                			if(h >= 0) {
 	    	                				filetype = tem.substring(h, tem.length());
@@ -130,6 +140,8 @@ public class Buildmodel {
 	    		    	                		filetypes.add(filetype);
 	    		    	                		filtyp = 1;
 	    		    	                	}
+	    	                			}else {
+	    	                				//README, LICENSE type wanna do?
 	    	                			}
 	    	                		}
 	    	                	}

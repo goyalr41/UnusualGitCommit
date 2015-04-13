@@ -38,4 +38,18 @@ public class CommitResultSerializer {
 		obj_out.writeObject (mscro);
 		obj_out.close();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String,CommitResultObject> read() throws IOException, ClassNotFoundException {
+		File resultobjectfile = new File(rs.Resultpath+"//resultobject.data");
+		Map<String,CommitResultObject> oldmscro = new HashMap<String,CommitResultObject>();
+		if(resultobjectfile.exists()){
+			FileInputStream f_in = new FileInputStream(resultobjectfile);
+			ObjectInputStream obj_in = new ObjectInputStream (f_in);
+			Object obj = obj_in.readObject();
+			oldmscro = (Map<String, CommitResultObject>)obj;
+			obj_in.close();
+		}
+		return oldmscro;
+	}
 }

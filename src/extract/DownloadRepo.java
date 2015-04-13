@@ -48,12 +48,15 @@ public class DownloadRepo {
 	    Collections.reverse(logs); //Latest last ldest top
 	    
 	    if(logs.size() == 0) {
-	    	
+	    	return;
 	    }
 	    
 	    Buildmodel bm = new Buildmodel();
 		int numofcommits = bm.build(git,logs, rs); //How many commits written, i.e not merge commits in this
 		
+		if(numofcommits > 100) {
+			 numofcommits = 100;
+		}
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
 		
@@ -88,7 +91,8 @@ public class DownloadRepo {
 	    Collections.reverse(logs);
 	    
 	    if(logs.size() == 0) {
-	    	
+	    	System.out.println("return hua");
+	    	return;  	
 	    }
 	      
 		Buildmodel bm = new Buildmodel();
