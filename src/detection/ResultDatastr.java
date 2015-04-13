@@ -1,11 +1,15 @@
 package detection;
 
-public class ResultDatastr {
-	int value;
-	String valuestrglb;
-	String valuestrauth;
-	double globalorg;
-	double globalmapped;
-	double authororg;
-	double authormapped;
+public class ResultDatastr implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public int value;
+	public String valuestrglb;
+	public String valuestrauth;
+	public double globalorg;
+	public double globalmapped;
+	public double authororg;
+	public double authormapped;
 }

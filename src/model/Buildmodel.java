@@ -26,7 +26,7 @@ import settings.RepoSettings;
 
 public class Buildmodel {
 	
-	public void build(Git git, List<RevCommit> logs, RepoSettings rs) throws NoHeadException, GitAPIException, IOException {
+	public int build(Git git, List<RevCommit> logs, RepoSettings rs) throws NoHeadException, GitAPIException, IOException {
 		
 		 //ObjectId lastCommitId = repository.resolve(Constants.MASTER);
         ObjectId parentid = null;
@@ -44,6 +44,7 @@ public class Buildmodel {
         WriteData wd = new WriteData(); //Class to write data to an external file
         wd.initiate(rs);
         
+        int cnt = 0; //Commits count that is written in data
         for (RevCommit rev : logs) {
         	
         	if(rev.getParentCount() == 1) { //Not taking Merge commits, for taking them make it >= .
@@ -170,10 +171,11 @@ public class Buildmodel {
 	    	    String[] commsgwords = rev.getFullMessage().split(" ");
 	    	    
 	    	    wd.write(rev.getName(), email, totallinechanged, ovllineadd, ovllinerem, filetypes.size(), totalfiladd, totalfilrem, Integer.parseInt(formatter.format(p.getWhen())), filetypes, commsgwords.length);
-	    	              
+	    	    cnt++;          
         	}  
         }
         
         repository.close();
+        return cnt;
 	}
 }

@@ -12,7 +12,6 @@ import ml.DataStatistics;
 import ml.FileTypeStatistics;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.revwalk.RevCommit;
 
 import settings.RepoSettings;
 
@@ -313,7 +312,7 @@ public class Detect {
 
 	}
 	
-	public void detect(RepoSettings rs, List<RevCommit> Commitids) throws IOException{
+	public void detect(RepoSettings rs, int numofcommits) throws IOException, ClassNotFoundException{
 		
 		File repo_global = new File(rs.Datapath + "//Global//Training_data.tsv");
 		List<String> CommitsData = FileUtils.readLines(repo_global);
@@ -335,9 +334,12 @@ public class Detect {
 		WriteResult wr = new WriteResult();
 		wr.initiate(rs);
 		
-		int len = Commitids.size();
-		len = 500;
-		int ana = 0;
+		CommitResultSerializer crs = new CommitResultSerializer();
+		crs.initiate(rs);	
+		Map<String,CommitResultObject> mscro = new HashMap<String,CommitResultObject>();
+		
+		int len = numofcommits;
+		int unusualnum = 0;
 		
 		for(int i = 0; i < len; i++) {
 			
@@ -435,15 +437,17 @@ public class Detect {
 	    		Decision = "Normal";
 	    	}else {
 	    		Decision = "Unusual";
-	    		ana++;
+	    		unusualnum++;
 	    	}
 	    	
 	    	wr.write(commitid.substring(0,7), email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
 	    	
+			CommitResultObject cro = new CommitResultObject(email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+			mscro.put(commitid.substring(0,7), cro);
+		
 	    	System.out.println(commitid.substring(0,7));
 		}
-		
-		System.out.println(ana);
-		
+		crs.write(mscro);
+		System.out.println(unusualnum);
 	}
 }

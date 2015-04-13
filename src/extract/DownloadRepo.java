@@ -25,7 +25,7 @@ public class DownloadRepo {
 
 	Git git;
 	
-	public void cloneRepo(String username, String reponame) throws InvalidRemoteException, TransportException, GitAPIException, IOException{
+	public void cloneRepo(String username, String reponame) throws InvalidRemoteException, TransportException, GitAPIException, IOException, ClassNotFoundException{
 		
 		CloneCommand clonecommand = Git.cloneRepository();
 		RepoSettings rs = new RepoSettings(username,reponame,true);
@@ -39,23 +39,27 @@ public class DownloadRepo {
 		//Cloning the Bare Repo
 		git = clonecommand.call(); 
 		
-		Iterable<RevCommit> logsreverse = git.log().all().call();
+		Iterable<RevCommit> logsreverse = git.log().all().call(); //Latest top oldest last
 
 	    List<RevCommit> logs = new ArrayList<RevCommit>();
 	    for(RevCommit rev: logsreverse){
 	    	logs.add(rev);
         }
-	    Collections.reverse(logs);
+	    Collections.reverse(logs); //Latest last ldest top
+	    
+	    if(logs.size() == 0) {
+	    	
+	    }
 	    
 	    Buildmodel bm = new Buildmodel();
-		bm.build(git,logs, rs);
+		int numofcommits = bm.build(git,logs, rs); //How many commits written, i.e not merge commits in this
 		
 		Detect detect = new Detect();
-		detect.detect(rs, logs);
+		detect.detect(rs, numofcommits);
 		
 	}
 	
-	public void pullRepo(String username, String reponame) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+	public void pullRepo(String username, String reponame) throws IOException, InvalidRemoteException, TransportException, GitAPIException, ClassNotFoundException {
 		
 		RepoSettings rs = new RepoSettings(username,reponame,false);
 		File f = new File(rs.RepositoryPath);
@@ -82,9 +86,16 @@ public class DownloadRepo {
 	    
 	    logs = (List<RevCommit>) CollectionUtils.subtract(logs, logsold);
 	    Collections.reverse(logs);
+	    
+	    if(logs.size() == 0) {
+	    	
+	    }
 	      
 		Buildmodel bm = new Buildmodel();
-		bm.build(git,logs, rs);
+		int numofcommits = bm.build(git,logs, rs);
+		
+		Detect detect = new Detect();
+		detect.detect(rs, numofcommits);
 		
 	}
 }
