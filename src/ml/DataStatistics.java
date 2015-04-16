@@ -26,10 +26,10 @@ public class DataStatistics {
 	public Map<String,Double> authormeanmap = new HashMap<String,Double>();
 	public Map<String,Double> authorsdtmap = new HashMap<String,Double>();
 	
-	public Rengine re;
+	public static Rengine re;
 	public RepoSettings rs;
 	
-	public void initiate(RepoSettings rs1) {
+	public void init() {
 		// Making sure we have the right version of everything
 		if (!Rengine.versionCheck()) {
 		    System.err.println("** Version mismatch - Java files don't match library version.");
@@ -38,7 +38,6 @@ public class DataStatistics {
 		
 		String[] args = null;
 		re = new Rengine(args, false, new TextConsole());
-		rs = rs1;
 		
 		// the engine creates R is a new thread, so we should wait until it's ready
         if (!re.waitForR()) {
@@ -46,6 +45,10 @@ public class DataStatistics {
             return;
         }
 		
+	}
+	
+	public void initiate(RepoSettings rs1){
+		rs = rs1;
 	}
 	
 	public void calcglobal() {
@@ -469,7 +472,7 @@ public void combinationgraphglobal() {
 	    	}
 	    
 	    	re.end();
-	}
+	   }
 	
 	
 	

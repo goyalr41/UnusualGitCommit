@@ -88,11 +88,10 @@ public class Detect {
 	        //Only binary values
             if(timefreq < 0.05*(fts.authortotalcommits)) {
             	rds.authororg = (timefreq/(fts.authortotalcommits));
-            	rds.authormapped = mapping(0.995);
+            	rds.authormapped = mapping(0.995); //Taking original value, but mapping is binary
 	        }else {
-	        	rds.authororg = 0.0;
+	        	rds.authororg = (timefreq/(fts.authortotalcommits));
             	rds.authormapped = mapping(0.0);
-
 	        }
 	    }else {
 	    	rds.authororg = 0.0;
@@ -338,6 +337,8 @@ public class Detect {
 		crs.initiate(rs);	
 		Map<String,CommitResultObject> mscro = new HashMap<String,CommitResultObject>();
 		
+		Reason r = new Reason();
+		
 		int len = numofcommits;
 		int unusualnum = 0;
 		
@@ -439,10 +440,12 @@ public class Detect {
 	    		Decision = "Unusual";
 	    		unusualnum++;
 	    	}
-	    	
+	    		    	
 	    	wr.write(commitid.substring(0,7), email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
 	    	
 			CommitResultObject cro = new CommitResultObject(email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+			cro.Reason = r.reasonis(totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+
 			mscro.put(commitid.substring(0,7), cro);
 		
 	    	System.out.println(commitid.substring(0,7));

@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ml.DataStatistics;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
@@ -26,8 +28,10 @@ import settings.Settings;
 public class Test {
 	public static void main(String args[]) throws InvalidRemoteException, TransportException, GitAPIException, IOException, ClassNotFoundException {
 		new Settings();
+		DataStatistics ds = new DataStatistics();
+		ds.init();
 		DownloadRepo dr = new DownloadRepo();
-		dr.cloneRepo("angular", "angular.js");
+		dr.cloneRepo("rails", "rails");
 		
 	}
 }

@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import ml.DataStatistics;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -27,14 +31,19 @@ import control.Control;
 @WebServlet(asyncSupported = true, description = "Servlet to call Unusual Commits classes", urlPatterns = { "/unusualcommit" })
 public class ucservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static Map<String,Integer> clonestatus;
        
     public ucservlet() {
         super();
         // TODO Auto-generated constructor stub
+    	new Settings();
+		clonestatus = new HashMap<String,Integer>();
+		DataStatistics ds = new DataStatistics(); //To create REngine thread
+		ds.init();
     }
 
 	public void init(ServletConfig config) throws ServletException {
-		Settings s = new Settings();
+	
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,7 +51,6 @@ public class ucservlet extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,16 +74,22 @@ public class ucservlet extends HttpServlet {
 		
 		System.out.println(username);
 		System.out.println(reponame);
-		for(String s: commitids) {
+		/*for(String s: commitids) {
 			System.out.println(s);
-		}
+		}*/
 		
 		//Setting response type as JSON
 		response.setContentType("application/json");
 		
 		Control cont = new Control();
 		try {
-			cont.check(username, reponame);
+			while(clonestatus.containsKey("username+reponame")) {
+				//System.out.println("Other thread accessing");
+			}
+			clonestatus.put("username+reponame",1);
+			cont.check(username, reponame,response);
+			clonestatus.remove("username+reponame");
+			
 		} catch (ClassNotFoundException | GitAPIException e) {
 			e.printStackTrace();
 			System.out.println("Exception in doPost building model");

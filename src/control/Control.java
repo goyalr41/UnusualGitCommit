@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
@@ -18,7 +21,7 @@ import settings.RepoSettings;
 import settings.Settings;
 
 public class Control {
-	public void check(String username, String reponame) throws InvalidRemoteException, TransportException, ClassNotFoundException, GitAPIException, IOException {
+	public void check(String username, String reponame, HttpServletResponse response) throws InvalidRemoteException, TransportException, ClassNotFoundException, GitAPIException, IOException {
 		
 		 String repoworkingDir = Settings.RepositoriesPath;
 		 
@@ -47,11 +50,33 @@ public class Control {
 			if(res.containsKey(commitid)) {
 				System.out.println(res.get(commitid).Decision);
 				co.result = res.get(commitid).Decision;
+				co.Decisionval = res.get(commitid).Decisionval+"";
+				co.Reason = res.get(commitid).Reason;
 			}else {
 				co.result = "Merge/First Commit";
 			}
 			commitres.add(co);
 		}
 	    return commitres;
+	}
+	
+	public String getStatus(String username, String reponame) throws IOException {
+		RepoSettings rs = new RepoSettings(username,reponame,false);
+		File f = new File(rs.Progress);
+		if(f.exists()) {
+			List<String> s = FileUtils.readLines(f);
+			if(s.get(0).equals("Cloning")){
+				return "Cloning " + reponame + " repository";
+			}else if(s.get(0).startsWith("Building")) {
+				return "Building Model for " + s.get(0).split(" ")[1] + "commits";
+			}else if(s.get(0).equals("Detecting")) {
+				return "Detecting Commits";
+			}else if(s.get(0).equals("Completed")) {
+				return "Completed";
+			}else {
+				return "Nothing";
+			}
+		}
+		return "Nothing";
 	}
 }

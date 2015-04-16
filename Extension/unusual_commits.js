@@ -7,6 +7,8 @@
   });
 });*/
 
+$(function () { $("[data-toggle='tooltip']").tooltip(); });
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
   callit(request.url);
@@ -24,6 +26,7 @@ function callit(url) {
 	var reponame = url.split("/")[4];
 	console.log(username);
 	console.log(reponame);
+	
 	jQuery(function($){
 		$("a.sha.btn.btn-outline").each(function(){
 			var value = $(this).html();
@@ -31,10 +34,39 @@ function callit(url) {
 			commitids.push(value.trim());
 		});
 	});
-	sendAjax(username, reponame, commitids);
+	sendAjaxPost(username, reponame, commitids);
+	
+	var CommitIn = new Object();
+	CommitIn.username = username;
+	CommitIn.reponame = reponame;
+	CommitIn.commitids = commitids;
+	    
+	var ajax_call = function() {
+		$.ajax({
+	        url: "https://localhost:8443/UnusualGitCommit/unusualcommitstatus",
+	        type: 'POST',
+	        dataType: 'json',
+			crossDomain: true,
+	        data: JSON.stringify(CommitIn),
+	        contentType: 'application/json',
+	        mimeType: 'application/json',
+	 
+	        success: function (data) {
+	        	console.log(data);
+	        },
+	        
+	        error:function(data,status,er) {
+	            alert("error: "+data+" status: "+status+" er:"+er);
+	        }
+	    });
+
+	};
+
+	var interval = 500; // 0.5 sec
+	setInterval(ajax_call, interval);
 }
 
-function sendAjax(username, reponame, commitids) {
+function sendAjaxPost(username, reponame, commitids) {
 
 	console.log("call");
 
@@ -58,9 +90,11 @@ function sendAjax(username, reponame, commitids) {
         	$("a.sha.btn.btn-outline").each(function(){
     			var value = $(this).html();
     			console.log(data[i].result);
+    			console.log(data[i].Reason);
     			if(data[i].result == "Unusual") {
     				$(this).css('background-color','#fcc');
     			}
+    			$(this).tooltip({title: data[i].Reason});
     			i = i+1;
     		});
         },

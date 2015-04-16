@@ -1,6 +1,7 @@
 package extract;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,8 +37,16 @@ public class DownloadRepo {
 		String URI = "https://github.com/" + username + "/" +  reponame + ".git";
 		clonecommand.setURI(URI);
 		
+		File progress = new File(rs.Progress);
+		FileWriter pro = new FileWriter(progress);
+		pro.append("Cloning\n");
+		pro.flush();
+		pro.close();
+		//long startTime = System.nanoTime();
 		//Cloning the Bare Repo
 		git = clonecommand.call(); 
+		//long endTime = System.nanoTime();
+		//System.out.println("Took "+(endTime - startTime) + " ns");
 		
 		Iterable<RevCommit> logsreverse = git.log().all().call(); //Latest top oldest last
 
@@ -45,11 +54,15 @@ public class DownloadRepo {
 	    for(RevCommit rev: logsreverse){
 	    	logs.add(rev);
         }
-	    Collections.reverse(logs); //Latest last ldest top
+	    Collections.reverse(logs); //Latest last, oldest top
 	    
 	    if(logs.size() == 0) {
 	    	return;
 	    }
+	    pro = new FileWriter(progress);
+	    pro.append("Building " + logs.size() + "\n");
+	    pro.flush();
+		pro.close();
 	    
 	    Buildmodel bm = new Buildmodel();
 		int numofcommits = bm.build(git,logs, rs); //How many commits written, i.e not merge commits in this
@@ -57,8 +70,19 @@ public class DownloadRepo {
 		if(numofcommits > 100) {
 			 numofcommits = 100;
 		}
+		
+		pro = new FileWriter(progress);
+		pro.append("Detecting" + "\n");
+		pro.flush();
+		pro.close();
+		
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
+		
+		pro = new FileWriter(progress);
+		pro.append("Completed" + "\n");
+		pro.flush();
+		pro.close();
 		
 	}
 	
@@ -75,6 +99,11 @@ public class DownloadRepo {
 	    	logsold.add(rev);
         }
 	    
+	    File progress = new File(rs.Progress);
+		FileWriter pro = new FileWriter(progress);
+		pro.append("Fetching");
+		pro.flush();
+		pro.close();
 		FetchCommand fetch = git.fetch();
 		
 		//Pulling the Repo, since its Bare Repo only Fetch is sufficient, merging not required
@@ -91,15 +120,29 @@ public class DownloadRepo {
 	    Collections.reverse(logs);
 	    
 	    if(logs.size() == 0) {
-	    	System.out.println("return hua");
 	    	return;  	
 	    }
+	    
+	    pro = new FileWriter(progress);
+	    pro.append("Bulding " + logs.size() + "\n");
+	    pro.flush();
+		pro.close();
 	      
 		Buildmodel bm = new Buildmodel();
 		int numofcommits = bm.build(git,logs, rs);
 		
+		pro = new FileWriter(progress);
+		pro.append("Detecting" + "\n");
+		pro.flush();
+		pro.close();
+		
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
+		
+		pro = new FileWriter(progress);
+		pro.append("Completed" + "\n");
+		pro.flush();
+		pro.close();
 		
 	}
 }

@@ -1,7 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var link = document.getElementById("link");
+/*document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementsByClassName("btn btn-primary");
     // onClick's logic below:
-    link.addEventListener('Click', masti());
+    link.addEventListener("click", masti());
+});*/
+$(function() {
+$("#findunusual").click(function() {
+	masti();
+});
 });
 
 function masti(){
