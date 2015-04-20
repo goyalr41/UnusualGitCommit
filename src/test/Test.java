@@ -28,6 +28,7 @@ import settings.Settings;
 public class Test {
 	public static void main(String args[]) throws InvalidRemoteException, TransportException, GitAPIException, IOException, ClassNotFoundException {
 		new Settings();
+		//Write to inititate R. As no servlet here
 		DataStatistics ds = new DataStatistics();
 		ds.init();
 		DownloadRepo dr = new DownloadRepo();

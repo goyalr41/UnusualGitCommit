@@ -3,8 +3,8 @@ function check(tabId, changeInfo, tab) {
   repo = tab.url.split("/")[4]
   commit = tab.url.split("/")[5]
 
-  if (tab.url.indexOf('github.com/') > -1 && user && repo && commit) {
-    chrome.pageAction.show(tabId);
+  if (tab.url.indexOf('github.com/') > -1 && user && repo && commit && changeInfo.url === undefined) {
+	  chrome.pageAction.show(tabId);
   }else {
 	  chrome.pageAction.hide(tabId);
   }

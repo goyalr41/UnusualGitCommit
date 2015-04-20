@@ -31,8 +31,8 @@ public class Reason {
 		resmap.put("filpercommitauth", "Filetype Y is changed in X% of commits by the author of commit");
 		resmap.put("combfrequency", "Combination of filetype Y and Z is changed in X% of commits in this repository");
 		resmap.put("combfrequencyauth", "Combination of filetype Y and Z is changed in X% of commits by the author of commit");
-		resmap.put("combpropbability", "Probability of ratio of filetype Y and Z is X in this repository");
-		resmap.put("combpropbabilityauth", "Probability of ratio of filetype Y and Z is X by the author of commit");
+		resmap.put("combprobability", "Probability of ratio of filetype Y and Z is X in this repository");
+		resmap.put("combprobabilityauth", "Probability of ratio of filetype Y and Z is X by the author of commit");
 	}
 	
 	public String reasonis(ResultDatastr totalloc, ResultDatastr locadded, ResultDatastr locremoved, 

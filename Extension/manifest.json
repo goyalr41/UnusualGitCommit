@@ -21,7 +21,6 @@
         ],
 		"js": [
 			"jquery.min.js",
-			"bootstrap.min.js",
             "unusual_commits.js"
         ],
         "run_at": "document_end"

@@ -120,6 +120,10 @@ public class DownloadRepo {
 	    Collections.reverse(logs);
 	    
 	    if(logs.size() == 0) {
+	    	pro = new FileWriter(progress);
+			pro.append("Completed2" + "\n");
+			pro.flush();
+			pro.close();
 	    	return;  	
 	    }
 	    

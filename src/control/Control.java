@@ -65,14 +65,23 @@ public class Control {
 		File f = new File(rs.Progress);
 		if(f.exists()) {
 			List<String> s = FileUtils.readLines(f);
+			if(s.isEmpty()){
+				return "Writing";
+			}
 			if(s.get(0).equals("Cloning")){
 				return "Cloning " + reponame + " repository";
 			}else if(s.get(0).startsWith("Building")) {
-				return "Building Model for " + s.get(0).split(" ")[1] + "commits";
+				if(s.get(0).split(" ").length >= 2) {
+					return "Building Model for " + s.get(0).split(" ")[1] + " commits";
+				}
 			}else if(s.get(0).equals("Detecting")) {
 				return "Detecting Commits";
 			}else if(s.get(0).equals("Completed")) {
 				return "Completed";
+			}else if(s.get(0).equals("Completed2")) {
+				return "No Updates, Completed";
+			}else if(s.get(0).equals("Fetching")) {
+				return "Fetching " + reponame + " repository";
 			}else {
 				return "Nothing";
 			}
