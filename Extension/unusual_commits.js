@@ -24,12 +24,6 @@ chrome.runtime.onConnect.addListener(function(port) {
 	port.onMessage.addListener(function(msg) {
 		port1 = port;
 		callit(msg.url);
-		if (msg.joke == "Knock knock")
-			port.postMessage({question: "Who's there?"});
-		else if (msg.answer == "Madame")
-			port.postMessage({question: "Madame who?"});
-	    else if (msg.answer == "Madame... Bovary")
-	    	port.postMessage({question: "I don't get it."});
 	 });
 });
 	
@@ -54,14 +48,14 @@ function callit(url) {
 				var value = $(this).html();
 				//console.log(value);
 				//$(this).append("<button aria-label='Copy the full SHA' class='js-zeroclipboard btn btn-outline zeroclipboard-button tooltipped tooltipped-s' data-clipboard-text='16487ac105e280cf05e3233adb28c096e02001b8' data-copied-hint='Copied!' data-copy-hint='Copy the full SHA' type='button'><span class='octicon octicon-graph'></span></button>");
-				$(this).append("<button aria-label='Statistics' class='btn btn-outline tooltipped tooltipped-s statsbutton' rel='nofollow'><span class='octicon octicon-graph'></span></button>");
+				//$(this).append("<button aria-label='Statistics' class='btn btn-outline tooltipped tooltipped-s statsbutton' rel='nofollow'><span class='octicon octicon-graph'></span></button>");
+				$(this).append("<a href='#' target='_blank' aria-label='Statistics' class='btn btn-outline tooltipped tooltipped-s statsbutton' rel='nofollow'><span class='octicon octicon-graph' type='button'></span></a>");
 			});	
 			
 			$("a.sha.btn.btn-outline").each(function(){
 				var value = $(this).html();
 				//console.log(value.trim());
 				commitids.push(value.trim());
-				//$(this).append("<p>Test</p>");	
 			});
 			
 			sendAjaxPost(username, reponame, commitids);
@@ -182,6 +176,7 @@ function sendAjaxPost(username, reponame, commitids) {
     			//if(data[i].result == "Unusual") {
 				
     				$(this).attr("aria-label", data[i].Reason);
+    				$(this).attr("href", "https://localhost:8443/unusualenhanced/"+username+reponame+".html");
     			
     				
     			/*$(this).append("<div class='modal fade' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>"
