@@ -131,23 +131,59 @@ function sendAjaxPost(username, reponame, commitids) {
     			var value = $(this).html();
     			//console.log(data[i].result);
     			//console.log(data[i].Reason);
-    			if(data[i].result == "Unusual") {
-    				$(this).css('background-color','#fcc');
+
+    			if(data[i].result.indexOf("Merge") <= -1) {
+    				$(this).addClass("notmerge");
     			}
+    			//shading part
+    		   	var value = $(this).html();
+    		   	//console.log(value);
+    		   	// add exception handling for '-' or null cases 
+    		   	try{
+    			   	var compare_value = parseFloat(data[i].Decisionval);
+    			   	$(this).addClass("tooltipped tooltipped-s").attr("aria-label", "Anamoly Score: " + Math.round(data[i].Decisionval * 10000) / 10000);
+    			    //console.log(compare_value);
+    			   		$(this).heatcolor(
+    						function() { return compare_value; },
+    						{	lightness: 0,
+    							colorStyle: 'greentored',
+    							maxval: 1.0,
+    							minval: 0.5,
+    							reverseOrder: true
+    						}
+    					);
+        				//$(this).css( "color", "black");
+    		   		}
+    		   		catch(err)
+    		   		{
+    		   			//do nothing
+    		   		}
     			//$(this).addClass("tooltipped tooltipped-s tooltipped-multiline").attr("aria-label", data[i].Reason);
     			i = i+1;
     		});
+        	
+        	$("a.sha.btn.btn-outline.notmerge").css("color", "black");
         	
         	//$(".btn.btn-outline.tooltipped.tooltipped-s.statsbutton").attr("data-toggle" , "modal");
 			//$(".btn.btn-outline.tooltipped.tooltipped-s.statsbutton").attr("data-target" , "#myModal");
 			
 			i = 0;
+			$('head').append('<style>.tooltipped:after{text-align:left !important;}</style>');
+			$('head').append('<style>.tooltipped:after{background:rgba(0,0,0,1) !important;}</style>');
+			/*$('.tooltipped').hover(function(){
+				$("this").css("text-align", "left");
+				$("this").css("background", "rgba(0,0,0,1)");
+			});*/
+			
 			
 			$(".btn.btn-outline.tooltipped.tooltipped-s.statsbutton").each(function(){
     			//console.log(data[i].result);
     			//console.log(data[i].Reason);
     			//if(data[i].result == "Unusual") {
+				
     				$(this).attr("aria-label", data[i].Reason);
+    			
+    				
     			/*$(this).append("<div class='modal fade' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>"
       				     +  "</div>");*/
     			//}

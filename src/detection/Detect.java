@@ -94,8 +94,8 @@ public class Detect {
             	rds.authormapped = mapping(0.0);
 	        }
 	    }else {
-	    	rds.authororg = 0.0;
-        	rds.authormapped = mapping(0.0);
+	    	rds.authororg = 0.5;
+        	rds.authormapped = mapping(0.5);
  		}	
 		rds.globalorg = 0.0; //As no profile for global
     	rds.globalmapped = mapping(0.0);

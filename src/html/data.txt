@@ -1,0 +1,43 @@
+  <tr>
+      <td><a target="_blank"  href="https://github.com/$author/$repository/commit/$id">$id</a></td>
+	  <td>$email</td>
+	  <td>$locvalue</td>
+	  <td class = "valglb">$locglb</td>
+	  <td class = "valauth">$locauth</td>
+	  <td>$locaddvalue</td>
+	  <td class = "valglb">$locaddglb</td>
+	  <td class = "valauth">$locaddauth</td>
+	  <td>$locremvalue</td>
+	  <td class = "valglb">$locremglb</td>
+	  <td class = "valauth">$locremauth</td>
+	  <td>$nofvalue</td>
+	  <td class = "valglb">$nofglb</td>
+	  <td class = "valauth">$nofauth</td>
+	  <td>$nofaddvalue</td>
+	  <td class = "valauth">$nofaddauth</td>
+	  <td>$nofremvalue</td>
+	  <td class = "valauth">$nofremauth</td>
+	  <td>$commsgvalue</td>
+	  <td class = "valglb">$commmsgglb</td>
+	  <td class = "valauth">$commmsgauth</td>
+	  <td>$tocvalue</td>
+	  <td class = "valauth">$tocauth</td>
+	  <td>$filepervalue</td>
+	  <td class = "valglb">$fileperglb</td>
+	  <td>$filecommitvalue</td>
+	  <td class = "valglb">$filecommitglb</td>
+	  <td>$filecombivalue</td>
+	  <td class = "valglb">$filecombiglb</td>
+	   <td>$filecombiratiovalue</td>
+	  <td class = "valglb">$filecombiratioglb</td>
+	  <td>$authfpervalue</td>
+	  <td class = "valauth">$fileperauth</td>
+	  <td>$authfcommitvalue</td>
+	  <td class = "valauth">$filecommitauth</td>
+	  <td>$authfcombivalue</td>
+	  <td class = "valauth">$filecombiauth</td>
+	   <td>$authfcombiratiovalue</td>
+	  <td class = "valauth">$filecombiratioauth</td>
+	  <td class = "result">$decision</td>
+	  <td class = "valres">$decvalue</td>
+ </tr>

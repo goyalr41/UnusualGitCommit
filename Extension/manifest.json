@@ -21,6 +21,7 @@
         ],
 		"js": [
 			"jquery.min.js",
+			"jquery.heatcolor.0.0.1.js",
             "unusual_commits.js"
         ],
         "run_at": "document_end"

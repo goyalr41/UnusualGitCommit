@@ -29,6 +29,26 @@ public class Control {
 		 File repopath = new File(RepositoryPath);
 		 
 		 if(repopath.exists()) {
+			 RepoSettings rs = new RepoSettings(username,reponame,false);
+			 File f = new File(rs.Progress);
+			 if(f.exists()) {
+				 List<String> s = FileUtils.readLines(f);
+				 if(!s.isEmpty()){
+					 if(!s.get(0).startsWith("Complete")){ //If not complete, clone again
+						 DownloadRepo dr = new DownloadRepo();
+						 dr.cloneRepo(username, reponame);
+						 return;
+					 }
+				 }else {
+					 DownloadRepo dr = new DownloadRepo(); //It can't be empty, clone again
+					 dr.cloneRepo(username, reponame);
+					 return;
+				 }
+			 }else {
+				 DownloadRepo dr = new DownloadRepo(); //the file should exist, clone again
+				 dr.cloneRepo(username, reponame);
+				 return; 
+			 }
 			 DownloadRepo dr = new DownloadRepo();
 			 dr.pullRepo(username, reponame);
 		 }else {
@@ -54,6 +74,7 @@ public class Control {
 				co.Reason = res.get(commitid).Reason;
 			}else {
 				co.result = "Merge/First Commit";
+				co.Reason = "Merge/First Commit";
 			}
 			commitres.add(co);
 		}
