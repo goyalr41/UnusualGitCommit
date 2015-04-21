@@ -28,12 +28,12 @@ chrome.runtime.onConnect.addListener(function(port) {
 });
 	
 function callit(url) {
-	console.log(url);
+	//console.log(url);
 	var commitids = [];
 	var username = url.split("/")[3];
 	var reponame = url.split("/")[4];
-	console.log(username);
-	console.log(reponame);
+	//console.log(username);
+	//console.log(reponame);
 	
 	jQuery(function($){
 		
@@ -80,7 +80,7 @@ function callit(url) {
 		        mimeType: 'application/json',
 		 
 		        success: function (data) {
-		        	console.log(data);
+		        	//console.log(data);
 					port1.postMessage(data);
 		        	if(data.status.indexOf("Completed") > -1) {
 		        		clearInterval(interval);
