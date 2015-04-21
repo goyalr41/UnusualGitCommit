@@ -6,32 +6,46 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import settings.Settings;
+public class Htmldata {
+	
+	public String workingDir = "";
+	public String HtmlfilesPath = "";
+	public String username = "";
+	public String reponame = "";
+	//Add/Change it in Server.xml as well. <Context part in server.xml>
+	public String HtmlFolderPath = "C://apache-tomcat-7.0.59-windows-x64//apache-tomcat-7.0.59//webapps//unusualenhanced";
+	
+	public void initiate(String username1, String reponame1) {
+		 workingDir = System.getProperty("user.dir");		 
+		 workingDir = workingDir.replace("\\", "//");		 
+		 HtmlfilesPath = workingDir + "//src//html//";
+		 username = username1;
+		 reponame = reponame1;
+	}
 
-public class htmldata {
-	public static void addheader(StringBuilder sb) throws IOException {
-		File header = new File(Settings.Htmlpath + "header.txt");
+	public void addheader(StringBuilder sb) throws IOException {
+		File header = new File( HtmlfilesPath + "header.txt");
 		String heade = FileUtils.readFileToString(header);
 		sb.append(heade); 
 	}
 	
-	public static void addfooter(StringBuilder sb) throws IOException {
-		File header = new File(Settings.Htmlpath + "footer.txt");
+	public void addfooter(StringBuilder sb) throws IOException {
+		File header = new File( HtmlfilesPath + "footer.txt");
 		String heade = FileUtils.readFileToString(header);
 		sb.append(heade); 
 	}
 	
-	public static void addend(StringBuilder sb) throws IOException {
-		File header = new File(Settings.Htmlpath + "end.txt");
+	public void addend(StringBuilder sb) throws IOException {
+		File header = new File( HtmlfilesPath + "end.txt");
 		String heade = FileUtils.readFileToString(header);
 		sb.append(heade); 
 	}
 	
-	public static void addtag(StringBuilder sb, String[] fil) throws IOException {
-		File header = new File(Settings.Htmlpath + "data.txt");
+	public void addtag(StringBuilder sb, String[] fil) throws IOException {
+		File header = new File(HtmlfilesPath + "data.txt");
 		String heade = FileUtils.readFileToString(header);
-		heade = heade.replace("$author", Settings.owner);
-		heade = heade.replace("$repository", Settings.repo);
+		heade = heade.replace("$author", username);
+		heade = heade.replace("$repository", reponame);
 		int i = 0;
 		heade = heade.replace("$id", fil[i++]);
 		heade = heade.replace("$email",fil[i++]);
@@ -83,34 +97,27 @@ public class htmldata {
 		
 	}
 	
-	public static void call(File data) throws IOException {
+	public void createhtml(File data) throws IOException {
+		
 		StringBuilder sb = new StringBuilder();
 		addheader(sb);
 		List<String> h = FileUtils.readLines(data);
 		h.remove(0);
-		/*for(String dat: h) {
-			System.out.println(dat);
-		}*/
 		for(String dat: h) {
 			String[] fil = dat.split("\t");
 			addtag(sb,fil);
 		}
 		addfooter(sb);
 		addend(sb);
-		File HtmlFile = new File(Settings.Resultpath + Settings.Repositoryname + "//result.html");
+		File HtmlFile = new File(HtmlFolderPath+ "//" + username + reponame + ".html");
 		FileUtils.writeStringToFile(HtmlFile, sb.toString());
+		return;
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Settings s = new Settings();
-		Settings.Repositorypath = "C://Users//Raman Workstation//Documents//GitHub//node.git";
-		Settings.Repositoryname = "Nodefin";
-		Settings.owner = "joyent";
-		Settings.repo = "node";
-		s.initiate();
+	/*public static void main(String[] args) throws IOException {
 		
-		File res = new File(Settings.Resultpath + Settings.Repositoryname +   "//result.tsv");
-		call(res);
+	
+		//call(res);
 		/*StringBuilder sb = new StringBuilder();
 		addheader(sb);
 		String[] fil = new String[26];
@@ -124,6 +131,6 @@ public class htmldata {
 		File HtmlFile = new File("C:\\Users\\Raman Workstation\\workspace\\UnusualCommits\\src\\html\\htmlfile.html");
 		FileUtils.writeStringToFile(HtmlFile, sb.toString());*/
 		
-	}
+	//}
 	
 }

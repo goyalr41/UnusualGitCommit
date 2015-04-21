@@ -340,7 +340,7 @@ public class Detect {
 		Reason r = new Reason();
 		
 		int len = numofcommits;
-		int unusualnum = 0;
+		//int unusualnum = 0;
 		
 		for(int i = 0; i < len; i++) {
 			
@@ -438,7 +438,7 @@ public class Detect {
 	    		Decision = "Normal";
 	    	}else {
 	    		Decision = "Unusual";
-	    		unusualnum++;
+	    		//unusualnum++;
 	    	}
 	    		    	
 	    	wr.write(commitid.substring(0,7), email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
@@ -448,9 +448,9 @@ public class Detect {
 
 			mscro.put(commitid.substring(0,7), cro);
 		
-	    	System.out.println(commitid.substring(0,7));
+	    	//System.out.println(commitid.substring(0,7));
 		}
 		crs.write(mscro);
-		System.out.println(unusualnum);
+		//System.out.println(unusualnum);
 	}
 }

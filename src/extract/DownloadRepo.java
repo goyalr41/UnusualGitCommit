@@ -1,5 +1,7 @@
 package extract;
 
+import html.Htmldata;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,6 +81,10 @@ public class DownloadRepo {
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
 		
+		Htmldata htmd = new Htmldata();
+		htmd.initiate(username,reponame);
+		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));
+		
 		pro = new FileWriter(progress);
 		pro.append("Completed" + "\n");
 		pro.flush();
@@ -142,6 +148,10 @@ public class DownloadRepo {
 		
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
+		
+		Htmldata htmd = new Htmldata();
+		htmd.initiate(username,reponame);
+		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));
 		
 		pro = new FileWriter(progress);
 		pro.append("Completed" + "\n");

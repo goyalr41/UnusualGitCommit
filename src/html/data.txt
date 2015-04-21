@@ -1,3 +1,5 @@
+
+<div id = "$id">
   <tr>
       <td><a target="_blank"  href="https://github.com/$author/$repository/commit/$id">$id</a></td>
 	  <td>$email</td>
@@ -41,3 +43,5 @@
 	  <td class = "result">$decision</td>
 	  <td class = "valres">$decvalue</td>
  </tr>
+ </div>
+ 
