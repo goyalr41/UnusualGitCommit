@@ -1,63 +1,111 @@
-<?xml version="1.0"?>
-<project name="Ant-Script" default="docs" basedir=".">
-  <!-- Sets variables which can later be used. -->
-  <!-- The value of a property is accessed via ${} -->
-  <property name="src.dir" location="src" />
-  <property name="build.dir" location="bin" />
-  <property name="dist.dir" location="dist" />
-  <property name="docs.dir" location="docs" />
-  <property file="build.properties" />	
-	
-   <presetdef name="javac">
-	   <javac includeantruntime="false" />
-   </presetdef>
-	
-	<path id="servlet-classpath">
-
-	        <fileset dir="${tomcat.dir}/common/lib">
-	            <include name="*.jar" />
-	        </fileset>
-
-	        <fileset dir="${tomcat.dir}/common/endorsed">
-	            <include name="*.jar" />
-	        </fileset>
-
-	    </path>
-
-  <!-- Deletes the existing build, docs and dist directory-->
-  <target name="clean">
-    <delete dir="${build.dir}" />
-    <delete dir="${docs.dir}" />
-    <delete dir="${dist.dir}" />
-  </target>
-
-  <!-- Creates the  build, docs and dist directory-->
-  <target name="makedir">
-    <mkdir dir="${build.dir}" />
-    <mkdir dir="${docs.dir}" />
-    <mkdir dir="${dist.dir}" />
-  </target>
-
-  <!-- Compiles the java code (including the usage of library for JUnit -->
-  <target name="compile" depends="clean, makedir" description="Compile the servlet">
-          <echo message="Compiling the Java file "/>
-          <echo message="${compiled.servlet}.java..."/>
-          <javac srcdir="${src.dir}" destdir="${build.dir}">
-              <include name="${compiled.servlet}.java" />
-              <classpath refid="servlet-classpath "/>
-          </javac>
-
-  </target>
-
-  <!-- Creates Javadoc -->
-  <target name="docs" depends="compile">
-    <javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}">
-      <!-- Define which files / directory should get included, we include all -->
-       <fileset dir="${src.dir}">
-                <include name="**" />
-           </fileset>
-    </javadoc>
-  </target>
-
-
-</project> 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="UnusualGitCommit">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../Downloads/Compressed/eclipse-java-luna-SR1a-win32-x86_64/eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath">
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/annotations-api.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/catalina-ant.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/catalina-ha.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/catalina-tribes.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/catalina.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/ecj-4.4.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/el-api.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/jasper-el.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/jasper.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/jsp-api.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/servlet-api.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-api.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-coyote.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-dbcp.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-i18n-es.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-i18n-fr.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-i18n-ja.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-jdbc.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat-util.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/tomcat7-websocket.jar"/>
+        <pathelement location="../../../../apache-tomcat-7.0.59-windows-x64/apache-tomcat-7.0.59/lib/websocket-api.jar"/>
+    </path>
+    <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/JRI.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/JRIEngine.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/REngine.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-collections4-4.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-io-2.4.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-annotations-2.5.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-core-2.5.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-databind-2.5.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsch-0.1.52.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.eclipse.jgit-3.6.1.201501031845-r-javadoc.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.eclipse.jgit-3.6.1.201501031845-r.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/renjin-script-engine-0.7.0-RC8-SNAPSHOT-jar-with-dependencies.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/renjin-studio-0.7.0-RC7-jar-with-dependencies.jar"/>
+    </path>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="UnusualGitCommit.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+        <pathelement location="libraries/commons-io-2.4.jar"/>
+        <pathelement location="libraries/JRI.jar"/>
+        <pathelement location="libraries/JRIEngine.jar"/>
+        <pathelement location="libraries/org.eclipse.jgit-3.6.1.201501031845-r-javadoc.jar"/>
+        <pathelement location="libraries/org.eclipse.jgit-3.6.1.201501031845-r.jar"/>
+        <pathelement location="libraries/REngine.jar"/>
+        <pathelement location="libraries/renjin-script-engine-0.7.0-RC8-SNAPSHOT-jar-with-dependencies.jar"/>
+        <pathelement location="libraries/renjin-studio-0.7.0-RC7-jar-with-dependencies.jar"/>
+        <pathelement location="libraries/commons-collections4-4.0.jar"/>
+        <pathelement location="libraries/jsch-0.1.52.jar"/>
+        <pathelement location="libraries/jackson-annotations-2.5.0.jar"/>
+        <pathelement location="libraries/jackson-core-2.5.0.jar"/>
+        <pathelement location="libraries/jackson-databind-2.5.0.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="UnusualGitCommit.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="Test">
+        <java classname="test.Test" failonerror="true" fork="yes">
+            <classpath refid="UnusualGitCommit.classpath"/>
+        </java>
+    </target>
+</project>

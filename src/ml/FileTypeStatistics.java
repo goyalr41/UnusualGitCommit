@@ -182,6 +182,8 @@ public class FileTypeStatistics {
 	
 	public void authfilecombinations(String email) throws IOException {
 		
+		authtwocombinations.clear();
+		
         File file_author_matrix = new File(rs.Datapath + "//Author//" + email + "_filepercom.tsv");
 
 		List<String> files = FileUtils.readLines(file_author_matrix);
