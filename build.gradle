@@ -6,8 +6,7 @@ repositories {
 }
 
 dependencies {
-	providedCompile "javax.servlet:servlet-api:3.0.1"
-	compile fileTree(dir: 'lib', include: '*.jar')
+	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 sourceSets {
