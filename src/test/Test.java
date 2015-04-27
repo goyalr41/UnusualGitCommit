@@ -19,7 +19,7 @@ public class Test {
 		DataStatistics ds = new DataStatistics();
 		ds.init();
 		DownloadRepo dr = new DownloadRepo();
-		dr.cloneRepo("ckaestne", "TypeChef");
+		dr.cloneRepo("goyalr41", "UnusualGitCommit");
 		
 	}
 }

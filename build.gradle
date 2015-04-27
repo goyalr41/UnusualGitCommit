@@ -1,5 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin:'application'
+
+mainClassName = "test.Test"
+applicationDefaultJvmArgs = ["-Djava.library.path=/Library/Frameworks/R.framework/Resources/library/rJava/jri/"]
 
 repositories {
 	mavenCentral()

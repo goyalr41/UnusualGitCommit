@@ -36,7 +36,7 @@ public class DataStatistics {
 		    System.exit(1);
 		}
 		
-		String[] args = null;
+		String[] args = {"--vanilla"};
 		re = new Rengine(args, false, new TextConsole());
 		
 		// the engine creates R is a new thread, so we should wait until it's ready
