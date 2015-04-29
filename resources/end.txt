@@ -1,0 +1,75 @@
+  </tfoot>
+</table>    
+	</body>
+	
+		
+	<script type="text/javascript">
+$(document).ready(function(){
+	
+	// tr border red for decision anomaly
+	$("#table_id td.result:contains('Unusual')").css('background-color','#fcc');
+	$("#table_id td.result:contains('Normal')").css('background-color','green');
+	
+	//shading part
+	$("td.valglb").each(function() {
+   		var value = $(this).html();
+   		//console.log(value);
+   		// add exception handling for '-' or null cases 
+   		try
+   		{
+   			var array = value.split(',');
+	   		var compare_value = parseFloat(array[1].trim());
+	   		//console.log(compare_value);
+	   		
+	   		$(this).heatcolor(
+				function() { return compare_value; },
+				{	lightness: 0.2,
+					colorStyle: 'greentored',
+					maxval: 0.3,
+					minval: 0.0,
+					reverseOrder: true
+				}
+			);
+			$(this).css('border','2px solid yellow');
+			$(this).css('border-right','2px solid black');	
+   		}
+   		catch(err)
+   		{
+   			//do nothing
+   		}
+   		
+	});
+
+	$("td.valauth").each(function() {
+   		var value = $(this).html();
+   		//console.log(value);
+   		try
+   		{
+   			var array = value.split(',');
+	   		var compare_value = parseFloat(array[1].trim());
+	   		//console.log(compare_value);
+	   		
+	   		$(this).heatcolor(
+				function() { return compare_value; },
+				{	lightness: 0.2,
+					colorStyle: 'greentored',
+					maxval: 0.3,
+					minval: 0.0,
+					reverseOrder: true
+				}
+			);
+
+			$(this).css('border','2px solid blue');
+			$(this).css('border-left','2px solid black');	
+   		}
+   		catch(err)
+   		{
+   			//do nothing
+   		}
+	});
+	$("#table_id td.result:contains('Unusual')").parent().css('border','4px solid red');
+
+});
+</script>  
+
+</html>

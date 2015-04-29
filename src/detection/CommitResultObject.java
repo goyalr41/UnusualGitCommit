@@ -1,5 +1,7 @@
 package detection;
 
+import java.util.List;
+
 public class CommitResultObject implements java.io.Serializable {
 
 	/**
@@ -22,6 +24,7 @@ public class CommitResultObject implements java.io.Serializable {
 	public String Decision;
 	public Double Decisionval;
 	public String Reason;
+	public List<DataReason> reasonlist;
 	
 	public CommitResultObject(String email1, 
 			ResultDatastr totalloc1, ResultDatastr locadded1, ResultDatastr locremoved1, 

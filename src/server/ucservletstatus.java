@@ -60,6 +60,8 @@ public class ucservletstatus extends HttpServlet {
 		
 		StatusClass sc = new StatusClass();
 		sc.status = status;
+		sc.username = cin.username;
+		sc.reponame = cin.reponame;
 		mapper.writeValue(response.getOutputStream(), sc);
 	}
 

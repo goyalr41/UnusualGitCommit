@@ -69,8 +69,8 @@ public class DownloadRepo {
 	    Buildmodel bm = new Buildmodel();
 		int numofcommits = bm.build(git,logs, rs); //How many commits written, i.e not merge commits in this
 		
-		if(numofcommits > 100) {
-			 numofcommits = 100;
+		if(numofcommits > 200) {
+			 numofcommits = 200;
 		}
 		
 		pro = new FileWriter(progress);
@@ -81,9 +81,9 @@ public class DownloadRepo {
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
 		
-		Htmldata htmd = new Htmldata();
+		/*Htmldata htmd = new Htmldata();
 		htmd.initiate(username,reponame);
-		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));
+		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));*/
 		
 		pro = new FileWriter(progress);
 		pro.append("Completed" + "\n");
@@ -149,9 +149,9 @@ public class DownloadRepo {
 		Detect detect = new Detect();
 		detect.detect(rs, numofcommits);
 		
-		Htmldata htmd = new Htmldata();
+		/*Htmldata htmd = new Htmldata();
 		htmd.initiate(username,reponame);
-		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));
+		htmd.createhtml(new File(rs.Resultpath+"//result.tsv"));*/
 		
 		pro = new FileWriter(progress);
 		pro.append("Completed" + "\n");

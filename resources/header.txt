@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<link href="style.css" rel="stylesheet">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
+		<script src = "jquery.heatcolor.0.0.1.js"> </script>		
+	</head>
+	
+	<body>
+		<table id="table_id">
+  <thead>
+    <tr>
+      <th scope="col">Commit ID</th>
+	  <th scope="col">Author E-Mail</th>
+	  <th scope="col" colspan = "3">LOC Changed</th>
+      <th scope="col" colspan = "3">LOC Added</th>
+      <th scope="col" colspan = "3">LOC Removed</th>
+	  <th scope="col" colspan = "3">Nos. of Files Changed</th>
+	  <th scope="col" colspan = "2">Nos. of Files Added</th>
+	  <th scope="col" colspan = "2">Nos. of Files Removed</th>
+	  <th scope="col" colspan = "3">Commit Msg</th>	  
+	  <th scope="col" colspan = "2">Time of Commit</th> 
+	  <th scope="col" colspan = "2">File Percent</th>
+	  <th scope="col" colspan = "2">File Per Com</th>
+	  <th scope="col" colspan = "2">File Combina</th>
+	  <th scope="col" colspan = "2">File Ratio</th>
+	  <th scope="col" colspan = "2">Auth File Percent</th>
+	  <th scope="col" colspan = "2">Auth File Per Com</th>
+	  <th scope="col" colspan = "2">Auth File Combina</th>
+	  <th scope="col" colspan = "2">Auth File Ratio</th>
+	  <th scope="col" colspan = "2">Decision</th>
+    </tr>
+  </thead>
+  <tbody>

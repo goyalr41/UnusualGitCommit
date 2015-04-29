@@ -94,6 +94,15 @@ public class ucservletsurveycl extends HttpServlet {
 			System.out.println("Exception in doPost building model");
 		}
 		
+		List<CommitOut> commitres = new ArrayList<CommitOut>();
+		try {
+			commitres = cont.randomcommits(username, reponame);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Exception in doPost fetching results");
+		}
+		
+		mapper.writeValue(response.getOutputStream(), commitres);
 	}
 	
 

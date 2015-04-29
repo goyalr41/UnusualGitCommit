@@ -444,7 +444,15 @@ public class Detect {
 	    	wr.write(commitid.substring(0,7), email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
 	    	
 			CommitResultObject cro = new CommitResultObject(email, totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+
+			cro.reasonlist = r.top5(totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
 			cro.Reason = r.reasonis(totalloc, locadded, locremoved, totalfilechanged, totalfileadded, totalfileremoved, commitmsg, timeofcommit, filpercentchan, filpercommit, combfrequency, combprobability, Decision, Decisionval);
+			
+			/*System.out.println(commitid.substring(0,7));
+			System.out.println(cro.Decisionval);
+			for(DataReason dr : cro.reasonlist) {
+				System.out.println(dr.name +" " + dr.valorg + " " + dr.value);
+			}*/
 
 			mscro.put(commitid.substring(0,7), cro);
 		

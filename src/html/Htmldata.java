@@ -14,10 +14,11 @@ public class Htmldata {
 	public String reponame = "";
 	//Add/Change it in Server.xml as well. <Context part in server.xml>
 	public String HtmlFolderPath = "C://apache-tomcat-7.0.59-windows-x64//apache-tomcat-7.0.59//webapps//unusualenhanced";
+	 ClassLoader loader = Htmldata.class.getClassLoader();
 	
 	public void initiate(String username1, String reponame1) {
 		 workingDir = System.getProperty("user.dir");		 
-		 workingDir = workingDir.replace("\\", "//");		 
+		 workingDir = workingDir.replace("\\", "//");	
 		 HtmlfilesPath = "C://Users//Raman Workstation//workspace//UnusualGitCommit//src//html//";
 		 username = username1;
 		 reponame = reponame1;
