@@ -114,7 +114,7 @@ public class Buildmodel {
 	    	                			if(h >= 0) {
 	    	                				filetype = tem.substring(h, tem.length());
 	    	                				filetype = filetype.replace(" ", "");
-
+	    	                				filetype = filetype.replace("\"", "");
 	    	                				if(filtyp != 1) {
 	    		    	                		filetypes.add(filetype);
 	    		    	                		filtyp = 1;
@@ -136,6 +136,7 @@ public class Buildmodel {
 	    	                			if(h >= 0) {
 	    	                				filetype = tem.substring(h, tem.length());
 	    	                				filetype = filetype.replace(" ", "");
+	    	                				filetype = filetype.replace("\"", "");
 	    	                				if(filtyp != 1) {
 	    		    	                		filetypes.add(filetype);
 	    		    	                		filtyp = 1;
