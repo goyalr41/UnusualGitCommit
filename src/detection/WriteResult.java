@@ -97,7 +97,9 @@ public class WriteResult {
 		FileWriter writer = new FileWriter(resultfile,true); 
 		
 		writer.append(commitid);
-		writer.append("\t" + email.substring(0, 7));
+		int len = email.length();
+		int minval = Math.min(len,7);
+		writer.append("\t" + email.substring(0, minval));
 		
 		writer.append("\t" + totalloc.value);
 		writer.append("\t" + round2(totalloc.globalorg) + " , " + round2(totalloc.globalmapped));
