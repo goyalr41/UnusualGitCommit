@@ -120,7 +120,9 @@ public class WriteData {
 	        	List<String> files = FileUtils.readLines(file_global);
 	        	for(String filetype : files) {
 	        		String[] temp = filetype.split("\t");
-	        		mapfilecount.put(temp[0], Long.parseLong(temp[1]));
+	        		if(temp.length > 1) {
+	        			mapfilecount.put(temp[0], Long.parseLong(temp[1]));
+	        		}
 	        	}
 	        }
 	        
@@ -177,7 +179,9 @@ public class WriteData {
 		    	List<String> files = FileUtils.readLines(authfiles);
 		    	for(String filetype : files) {
 		    		String[] temp = filetype.split("\t");
-		    		mapauthorfilecount.put(temp[0], Long.parseLong(temp[1]));
+	        		if(temp.length > 1) {
+	        			mapauthorfilecount.put(temp[0], Long.parseLong(temp[1]));
+	        		}
 		    	}
 		    }
 		    

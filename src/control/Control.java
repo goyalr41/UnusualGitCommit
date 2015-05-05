@@ -72,7 +72,7 @@ public class Control {
 			CommitOut co = new CommitOut();
 			co.commitid = commitid;
 			if(res.containsKey(commitid)) {
-				System.out.println(res.get(commitid).Decision);
+				//System.out.println(res.get(commitid).Decision);
 				co.result = res.get(commitid).Decision;
 				co.Decisionval = res.get(commitid).Decisionval+"";
 				co.Reason = res.get(commitid).Reason;

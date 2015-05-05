@@ -129,8 +129,10 @@ public class FileTypeStatistics {
     		List<String> templist = new ArrayList<>();
     		for(int i = 1; i < temp.length; i++) { //0 being the commit id
     				String[] temp1 = temp[i].split(",");
-    				tempmap.put(temp1[0],(temp1[1]));
+    				if(temp1.length > 1) {
+    					tempmap.put(temp1[0],(temp1[1]));
     				templist.add(temp1[0]);
+    				}
     		}	
     		Collections.sort(templist);
     	    		
@@ -194,8 +196,10 @@ public class FileTypeStatistics {
     		List<String> templist = new ArrayList<>();
     		for(int i = 1; i < temp.length; i++) {
     				String[] temp1 = temp[i].split(",");
+    				if(temp1.length > 1) {
     				tempmap.put(temp1[0],(temp1[1]));
     				templist.add(temp1[0]);
+    				}
     		}	
     		Collections.sort(templist);
     	    		

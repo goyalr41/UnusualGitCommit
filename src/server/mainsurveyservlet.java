@@ -1,12 +1,10 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,37 +13,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ml.DataStatistics;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import settings.Settings;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import control.Control;
-
 /**
- * Servlet implementation class ucservlet
+ * Servlet implementation class mainsurveyservlet
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/unusualcommitsurvey" })
-public class ucservletsurveycl extends HttpServlet {
+@WebServlet(asyncSupported = true, urlPatterns = { "/mainsurvey" })
+public class mainsurveyservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static Map<String,Integer> clonestatus;
-       
-    public ucservletsurveycl() {
+	public static String MainSurveyPath;
+	public static File mainsurveypath;
+	
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public mainsurveyservlet() {
         super();
         // TODO Auto-generated constructor stub
-    	new Settings();
-		clonestatus = new HashMap<String,Integer>();
-		DataStatistics ds = new DataStatistics(); //To create REngine thread
-		ds.init();
     }
 
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
 	public void init(ServletConfig config) throws ServletException {
-	
+		new Settings();
+		MainSurveyPath = Settings.UserDir + "//SurveyData//MainSurvey";
+		mainsurveypath = new File(MainSurveyPath);
+		mainsurveypath.mkdirs();	
 	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET");
@@ -53,6 +54,9 @@ public class ucservletsurveycl extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET");
@@ -66,53 +70,28 @@ public class ucservletsurveycl extends HttpServlet {
 	    }
 		
 		ObjectMapper mapper = new ObjectMapper();
-		CommitIn cin = mapper.readValue(json, CommitIn.class);
+		surveyclass suc = mapper.readValue(json, surveyclass.class);
 		
-		String username = cin.username;
-		String reponame = cin.reponame;
-		
-		System.out.println(username);
-		System.out.println(reponame);
-		/*for(String s: commitids) {
-			System.out.println(s);
-		}*/
-		
-		//Setting response type as JSON
-		response.setContentType("application/json");
-		
-		Control cont = new Control();
-		try {
-			while(clonestatus.containsKey(username+reponame)) {
-				//System.out.println("Other thread accessing");
-			}
-			clonestatus.put(username+reponame,1);
-			cont.check(username, reponame,response);
-			clonestatus.remove(username+reponame);
-			
-		} catch (ClassNotFoundException | GitAPIException e) {
-			e.printStackTrace();
-			System.out.println("Exception in doPost building model");
+		File mainsurvdat = new File(mainsurveypath + "//" + suc.participantid + "mainsurvey.tsv");
+		if(!mainsurvdat.exists()) {
+			mainsurvdat.createNewFile();
 		}
+		FileWriter fr = new FileWriter(mainsurvdat,true);
+		fr.append("PID: "+suc.participantid + "\t" + suc.data);  //"\n" is in client
+		fr.flush();
+		fr.close();
 		
-		List<CommitOut> commitres = new ArrayList<CommitOut>();
-		try {
-			commitres = cont.randomcommits(username, reponame);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Exception in doPost fetching results");
-		}
-		
-		mapper.writeValue(response.getOutputStream(), commitres);
+		//mapper.writeValue(response.getOutputStream(), idc);
 	}
-	
 
+	/**
+	 * @see HttpServlet#doOptions(HttpServletRequest, HttpServletResponse)
+	 */
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		
 	}
 
 }

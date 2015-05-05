@@ -47,6 +47,7 @@ public class DownloadRepo {
 		//long startTime = System.nanoTime();
 		//Cloning the Bare Repo
 		git = clonecommand.call(); 
+
 		//long endTime = System.nanoTime();
 		//System.out.println("Took "+(endTime - startTime) + " ns");
 		
@@ -93,7 +94,7 @@ public class DownloadRepo {
 	}
 	
 	public void pullRepo(String username, String reponame) throws IOException, InvalidRemoteException, TransportException, GitAPIException, ClassNotFoundException {
-		
+
 		RepoSettings rs = new RepoSettings(username,reponame,false);
 		File f = new File(rs.RepositoryPath);
 		

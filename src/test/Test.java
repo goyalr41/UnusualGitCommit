@@ -25,7 +25,7 @@ public class Test {
 		DataStatistics ds = new DataStatistics();
 		ds.init();
 		DownloadRepo dr = new DownloadRepo();
-		dr.cloneRepo("rich-harris", "ramjet");
+		dr.cloneRepo("libgdx", "libgdx");
 
 		
 		File f = new File("E://githubrepos.txt");
