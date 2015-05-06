@@ -25,18 +25,18 @@ public class Test {
 		DataStatistics ds = new DataStatistics();
 		ds.init();
 		DownloadRepo dr = new DownloadRepo();
-		dr.cloneRepo("libgdx", "libgdx");
+		//dr.cloneRepo("libgdx", "libgdx");
 
 		
 		File f = new File("E://githubrepos.txt");
 		List<String> ReposName = FileUtils.readLines(f);
 		
-		/*for(String reponame: ReposName) {
+		for(String reponame: ReposName) {
 			String[] temp = reponame.split("/");
 			if(temp.length == 2) {
 				dr.cloneRepo(temp[0], temp[1]);
 			}
-		}*/
+		}
 		
 		/*File f = new File("E://githubrepos.txt");
 		List<String> CommitsData = FileUtils.readLines(f);
