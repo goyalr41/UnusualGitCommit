@@ -239,28 +239,32 @@ public class Control {
 		List<String> keys = new ArrayList<String>(res.keySet());
 	
 		List<CommitOut> commitres = new ArrayList<CommitOut>();
-		List<String> commit0to7 = new ArrayList<String>();
-		List<String> commit7to9 = new ArrayList<String>();
-		List<String> commit9to95 = new ArrayList<String>();
+		List<String> commit0to6 = new ArrayList<String>();
+		List<String> commit6to8 = new ArrayList<String>();
+		List<String> commit9to93 = new ArrayList<String>();
+		List<String> commit93to95 = new ArrayList<String>();
 		List<String> commit95to1 = new ArrayList<String>();
 		
 		for(String commitkey: res.keySet()) {
 			double dval = res.get(commitkey).Decisionval;
-			if(dval < 0.7) {
-				commit0to7.add(commitkey);
-			}else if(dval >= 0.7 && dval < 0.9) {
-				commit7to9.add(commitkey);
-			}else if(dval >= 0.9 && dval < 0.95){
-				commit9to95.add(commitkey);
-			}else {
+			if(dval < 0.6) {
+				commit0to6.add(commitkey);
+			}else if(dval >= 0.6 && dval < 0.8) {
+				commit6to8.add(commitkey);
+			}else if(dval >= 0.9 && dval < 0.93){
+				commit9to93.add(commitkey);
+			}else if(dval >= 0.93 && dval < 0.95){
+				commit93to95.add(commitkey);
+			}else if(dval >= 0.95){
 				commit95to1.add(commitkey);
 			}
 		}
 		
 		int len95to1 = 1;
-		int len9to95 = 2;
-		int len7to9 = 1;
-		int len0to7 = 1;
+		int len9to93 = 1;
+		int len93to95 = 1;
+		int len6to8 = 1;
+		int len0to6 = 1;
 		
 		Set<String> setofcommits = new HashSet<String>();
 		
@@ -269,27 +273,38 @@ public class Control {
 				setofcommits.add(commit95to1.get(random.nextInt(commit95to1.size())));
 				len95to1--;
 			}
+		}else {
+			len93to95 = len93to95 + len95to1;
 		}
 		
-		if(commit9to95.size()!=0) {
-			while(len9to95 != 0) {
-				setofcommits.add(commit9to95.get(random.nextInt(commit9to95.size())));
-				len9to95--;
+		if(commit93to95.size()!=0) {
+			while(len93to95 != 0) {
+				setofcommits.add(commit93to95.get(random.nextInt(commit93to95.size())));
+				len93to95--;
+			}
+		}else {
+			len9to93 = len9to93 + len93to95;
+		}
+		
+		if(commit9to93.size()!=0) {
+			while(len9to93 != 0) {
+				setofcommits.add(commit9to93.get(random.nextInt(commit9to93.size())));
+				len9to93--;
 			}
 		}
 		
-		if(commit7to9.size()!=0) {
-			while(len7to9 != 0) {
-				setofcommits.add(commit7to9.get(random.nextInt(commit7to9.size())));
-				len7to9--;
+		if(commit6to8.size()!=0) {
+			while(len6to8 != 0) {
+				setofcommits.add(commit6to8.get(random.nextInt(commit6to8.size())));
+				len6to8--;
 			}
 		}
 		
 		
-		if(commit0to7.size()!=0) {
-			while(len0to7 != 0) {
-				setofcommits.add(commit0to7.get(random.nextInt(commit0to7.size())));
-				len0to7--;
+		if(commit0to6.size()!=0) {
+			while(len0to6 != 0) {
+				setofcommits.add(commit0to6.get(random.nextInt(commit0to6.size())));
+				len0to6--;
 			}
 		}
 		
