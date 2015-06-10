@@ -9,8 +9,8 @@ import java.io.File;
 public class Settings {
 	public static String RepositoriesPath = "";
 	public static String ModelsPath = "";
-	//public static String UserDir = "//home//goyalr42//UnusualCommitsData";  //Directory to Store Data
-	public static String UserDir = "D://Temporary";  //Directory to Store Data
+	public static String UserDir = "//home//goyalr42//UnusualCommitsData";  //Directory to Store Data
+	//public static String UserDir = "D://Temporary";  //Directory to Store Data
 
 	
 	public Settings() {

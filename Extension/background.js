@@ -10,9 +10,6 @@ function check(tabId, changeInfo, tab) {
   }
 
   //(".sha btn btn-outline").css('color','red');
-  
-  
-
 }
 
 chrome.tabs.onUpdated.addListener(check);

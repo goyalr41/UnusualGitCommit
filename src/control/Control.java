@@ -76,11 +76,17 @@ public class Control {
 				co.result = res.get(commitid).Decision;
 				co.Decisionval = res.get(commitid).Decisionval+"";
 				co.Reason = res.get(commitid).Reason;
+				co.username = username;
+				co.reponame = reponame;
+				co.reasonlist = res.get(commitid).reasonlist;
 			}else {
 				co.result = "Merge/First Commit";
 				co.Reason = "Merge/First Commit";
+				co.username = username;
+				co.reponame = reponame;
 			}
 			commitres.add(co);
+			
 		}
 	    return commitres;
 	}

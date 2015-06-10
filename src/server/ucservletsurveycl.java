@@ -31,15 +31,18 @@ import control.Control;
 @WebServlet(asyncSupported = true, urlPatterns = { "/unusualcommitsurvey" })
 public class ucservletsurveycl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static Map<String,Integer> clonestatus;
+	//public static Map<String,Integer> clonestatus;
        
     public ucservletsurveycl() {
         super();
         // TODO Auto-generated constructor stub
     	new Settings();
-		clonestatus = new HashMap<String,Integer>();
-		DataStatistics ds = new DataStatistics(); //To create REngine thread
-		ds.init();
+    	if(ucservlet.Rstatus == 0) {
+    		ucservlet.clonestatus = new HashMap<String,Integer>();
+			DataStatistics ds = new DataStatistics(); //To create REngine thread
+			ds.init();
+			ucservlet.Rstatus = 1;
+    	}
     }
 
 	public void init(ServletConfig config) throws ServletException {
@@ -82,12 +85,12 @@ public class ucservletsurveycl extends HttpServlet {
 		
 		Control cont = new Control();
 		try {
-			while(clonestatus.containsKey(username+reponame)) {
+			while(ucservlet.clonestatus.containsKey(username+reponame)) {
 				//System.out.println("Other thread accessing");
 			}
-			clonestatus.put(username+reponame,1);
+			ucservlet.clonestatus.put(username+reponame,1);
 			cont.check(username, reponame,response);
-			clonestatus.remove(username+reponame);
+			ucservlet.clonestatus.remove(username+reponame);
 			
 		} catch (ClassNotFoundException | GitAPIException e) {
 			e.printStackTrace();

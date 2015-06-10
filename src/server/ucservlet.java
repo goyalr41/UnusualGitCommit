@@ -32,14 +32,18 @@ import control.Control;
 public class ucservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static Map<String,Integer> clonestatus;
+	public static int Rstatus = 0;
        
     public ucservlet() {
         super();
         // TODO Auto-generated constructor stub
     	new Settings();
-		clonestatus = new HashMap<String,Integer>();
-		DataStatistics ds = new DataStatistics(); //To create REngine thread
-		ds.init();
+		if(Rstatus == 0) {
+			clonestatus = new HashMap<String,Integer>();
+			DataStatistics ds = new DataStatistics(); //To create REngine thread
+			ds.init();
+			Rstatus = 1;
+		}
     }
 
 	public void init(ServletConfig config) throws ServletException {
