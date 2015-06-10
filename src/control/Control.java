@@ -25,6 +25,7 @@ import settings.RepoSettings;
 import settings.Settings;
 
 public class Control {
+	
 	public void check(String username, String reponame, HttpServletResponse response) throws InvalidRemoteException, TransportException, ClassNotFoundException, GitAPIException, IOException {
 		
 		 String repoworkingDir = Settings.RepositoriesPath;
